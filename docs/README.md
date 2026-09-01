@@ -1,5 +1,12 @@
 # Tuai FE — Documentation
 
+> **⚠️ SIAKANG note:** these docs reference `src/module/finance/**` example
+> features (fund-transfer, cash-transactions, …) that do **not exist** in this
+> repo — they came with the upstream skeleton. The patterns hold; the paths do
+> not. See the banner at the top of [CONVENTIONS.md](CONVENTIONS.md) for what to
+> copy from instead.
+
+
 Dokumen ini menjelaskan standar dan pattern yang disepakati di proyek ini. Claude Code dan developer baru membaca ini untuk memahami "cara proyek ini bekerja" tanpa harus reverse-engineer dari kode.
 
 ## Quick reference

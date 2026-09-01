@@ -1,5 +1,28 @@
 # Conventions
 
+> **⚠️ Repo reality check (SIAKANG, 2026-09-02).**
+>
+> These docs came over with the `venturo-skeleton-react` / Tuai finance app, and
+> they reference example features that **do not exist in this repo**:
+> `src/module/finance/**` (`fund-transfer`, `cash-transactions`,
+> `journal-entry`, `contacts`, `chart-of-accounts`, `reports/*`) and the shared
+> `src/shared/utils/format.ts` currency helper.
+>
+> **The rules and patterns below still apply — the file paths don't.** When a
+> doc says "canonical reference: fund-transfer", read it as "this is the shape
+> we want", not as a file to open. If you go looking for that file you will not
+> find it, and you should not recreate it.
+>
+> What actually exists to copy from today:
+> - **List + dialog CRUD**: `src/module/core/features/branches/`, `.../users/`, `.../roles/`
+> - **Read-only list against a paginated endpoint**: `src/module/market/features/wallet/`
+> - **API layer + `unwrap<T>()`**: `src/module/core/features/auth/api/index.ts`
+>   (each feature carries its own `unwrap`; `src/shared/api/index.ts` is an empty stub)
+> - **Shared table toolkit**: `src/shared/ui/table/` — this one is real and mandatory
+>
+> Anything a doc describes that has no real example here still has to be built to
+> the described pattern. Delete this banner once the referenced features exist.
+
 Ringkasan aturan main. Detail per topik di [patterns/](patterns/).
 
 ## Stack & Tools
