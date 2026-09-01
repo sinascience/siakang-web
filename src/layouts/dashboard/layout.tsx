@@ -14,6 +14,7 @@ import { iconButtonClasses } from '@mui/material/IconButton';
 import { BrandLogo } from 'src/shared/ui/logo';
 import { useAuthContext } from 'src/module/core/features/auth/hooks';
 import { useSettingsContext } from 'src/module/core/features/settings';
+import { needsCompanyOnboarding } from 'src/module/core/features/auth/utils';
 
 import { NavMobile } from './nav-mobile';
 import { VerticalDivider } from './content';
@@ -230,7 +231,9 @@ export function DashboardLayout({
 
   const renderFooter = () => null;
 
-  const shouldBlankOutContent = authenticated && !company;
+  // Blank the content only for a tenant user who still has to pick a company.
+  // A marketplace persona has none by design and must still see the app.
+  const shouldBlankOutContent = needsCompanyOnboarding(authenticated, company, roles);
 
   const renderMain = () => (
     <MainSection {...slotProps?.main}>{shouldBlankOutContent ? null : children}</MainSection>

@@ -9,12 +9,16 @@ import DialogActions from '@mui/material/DialogActions';
 import { useTranslate } from 'src/locales';
 
 import { useAuthContext } from '../hooks';
+import { needsCompanyOnboarding } from '../utils';
 
 export function OnboardingDialog() {
-  const { authenticated, loading, user, company, signOut } = useAuthContext();
+  const { authenticated, loading, user, company, roles, signOut } = useAuthContext();
   const { t } = useTranslate('auth');
 
-  const open = !loading && authenticated && !!user && !company;
+  // Marketplace personas have no company by design, so this unclosable dialog
+  // must never fire for them — it would be an onboarding step with nothing to
+  // onboard into.
+  const open = !loading && !!user && needsCompanyOnboarding(authenticated, company, roles);
 
   return (
     <Dialog

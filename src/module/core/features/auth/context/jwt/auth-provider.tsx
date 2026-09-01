@@ -7,6 +7,7 @@ import { getGoogleIdToken } from 'src/shared/lib/firebase';
 import { invalidateAllCompanyCaches } from 'src/shared/lib/cache-registry';
 
 import * as authApi from '../../api';
+import { isMarketPersona } from '../../utils';
 import { AuthContext } from '../auth-context';
 import {
   setTokens,
@@ -21,18 +22,6 @@ import {
 type Props = {
   children: React.ReactNode;
 };
-
-/**
- * SIAKANG marketplace personas. A marketplace user legitimately has no company
- * — `/market/v1/*` is not company-scoped — so the company-resolution path below
- * must not run for them: it would fire `/auth/companies` and a `switch-company`
- * the marketplace contract says never happens in these flows.
- */
-const MARKET_ROLES = ['customer', 'lapak'];
-
-function isMarketPersona(roles: string[]): boolean {
-  return roles.some((role) => MARKET_ROLES.includes(role));
-}
 
 /**
  * Marketplace identity, fetched once per session. Fail-soft on purpose: a
