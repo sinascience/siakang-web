@@ -37,6 +37,7 @@
   "market": {
     "customer": "Marketplace",
     "lapak": "My Lapak",
+    "orders": "Orders",
     "wallet": "Wallet",
     "chat": "Chat"
   }

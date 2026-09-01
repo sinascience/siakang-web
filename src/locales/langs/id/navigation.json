@@ -37,6 +37,7 @@
   "market": {
     "customer": "Marketplace",
     "lapak": "Lapak Saya",
+    "orders": "Pesanan",
     "wallet": "Dompet",
     "chat": "Obrolan"
   }

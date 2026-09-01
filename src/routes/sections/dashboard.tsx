@@ -29,6 +29,8 @@ const TranslationOverridePage = lazy(
 );
 
 const WalletPage = lazy(() => import('src/module/market/features/wallet/pages'));
+const OrdersListPage = lazy(() => import('src/module/market/features/orders/pages/list'));
+const OrderDetailPage = lazy(() => import('src/module/market/features/orders/pages/detail'));
 const ChatListPage = lazy(() => import('src/module/market/features/chat/pages/list'));
 const ChatThreadPage = lazy(() => import('src/module/market/features/chat/pages/thread'));
 
@@ -84,6 +86,8 @@ export const dashboardRoutes: RouteObject[] = [
       // SIAKANG marketplace. Not wrapped in PermissionGuard: /market/v1/* runs
       // JWTAuth() only, so `permissions` is empty for marketplace users by design.
       { path: 'market/wallet', element: <WalletPage /> },
+      { path: 'market/orders', element: <OrdersListPage /> },
+      { path: 'market/orders/:id', element: <OrderDetailPage /> },
       { path: 'market/chat', element: <ChatListPage /> },
       { path: 'market/chat/:id', element: <ChatThreadPage /> },
       { path: 'demo/item', element: <DemoItemPage /> },
