@@ -4,6 +4,8 @@ import axios from 'axios';
 
 import { CONFIG } from 'src/shared/config';
 
+import { installMarketMock } from './market-mock';
+
 declare module 'axios' {
   export interface AxiosRequestConfig {
     _retry?: boolean;
@@ -22,6 +24,12 @@ const axiosInstance = axios.create({
   baseURL: CONFIG.serverUrl,
   headers: { 'Content-Type': 'application/json' },
 });
+
+// Dev-only: answer /market/v1/* from the in-repo fixtures instead of the
+// backend. Off in committed code; QA always runs with mocks OFF.
+if (CONFIG.useMocks) {
+  installMarketMock(axiosInstance);
+}
 
 let getAccessTokenFn: () => string | null = () => null;
 let getRefreshTokenFn: () => string | null = () => null;
@@ -99,7 +107,7 @@ axiosInstance.interceptors.response.use(
 export type ApiFieldErrors = Record<string, string[]>;
 
 /** Flatten the error map to one human string: `detail` wins, else the first field's first message. */
-function flattenFieldErrors(errors: ApiFieldErrors): string | undefined {
+export function flattenFieldErrors(errors: ApiFieldErrors): string | undefined {
   const detail = errors.detail?.[0];
   if (detail) return detail;
   return Object.values(errors).flat().find(Boolean);

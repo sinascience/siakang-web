@@ -1,4 +1,5 @@
 import type {
+  MarketMe,
   TokenPair,
   MeResponse,
   ApiEnvelope,
@@ -12,13 +13,18 @@ import type {
   SwitchCompanyResponse,
 } from '../types';
 
-import axios, { endpoints, withoutAuthRefresh } from 'src/shared/lib/axios';
+import axios, { endpoints, withoutAuthRefresh, flattenFieldErrors } from 'src/shared/lib/axios';
 
 async function unwrap<T>(promise: Promise<{ data: ApiEnvelope<T> }>): Promise<T> {
   const res = await promise;
   const payload = res.data;
   if (payload.data === null || payload.data === undefined) {
-    throw new Error(payload.errors || payload.message || 'Empty response');
+    const { errors } = payload;
+    const detail =
+      (typeof errors === 'string' ? errors : errors && flattenFieldErrors(errors)) ||
+      payload.message ||
+      'Empty response';
+    throw new Error(detail);
   }
   return payload.data;
 }
@@ -55,6 +61,14 @@ export function switchCompany(company_id: string) {
 
 export function getMe() {
   return unwrap<MeResponse>(axios.get(endpoints.auth.me));
+}
+
+/**
+ * Marketplace identity. Separate from `getMe()` because core performs no join
+ * into the `market` schema — see contract/api-v1.yaml, GET /market/v1/me.
+ */
+export function getMarketMe() {
+  return unwrap<MarketMe>(axios.get(endpoints.market.me));
 }
 
 export function getMyCompanies() {

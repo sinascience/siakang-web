@@ -2,7 +2,9 @@ export type ApiEnvelope<T> = {
   data: T | null;
   message: string;
   meta: unknown | null;
-  errors: string | null;
+  // `/core/v1/*` sends a plain string; the SIAKANG contract pins
+  // map<string, string[]> with `detail` reserved for non-field errors.
+  errors: string | Record<string, string[]> | null;
 };
 
 export type User = {
@@ -81,6 +83,27 @@ export type MeResponse = {
   is_super_admin: boolean;
 };
 
+/**
+ * SIAKANG marketplace identity. Core `/auth/me` performs no join into the
+ * `market` schema (product ruling 2026-09-02), so lapak identity comes from
+ * `GET /market/v1/me` — fetched once at session start, never per screen.
+ */
+export type LapakProfile = {
+  id: string;
+  user_id: string;
+  name: string;
+  description?: string;
+  lat?: number;
+  lng?: number;
+  rating: number;
+  is_available: boolean;
+};
+
+export type MarketMe = {
+  /** Non-null means the caller is a lapak; null means a customer. */
+  lapak: LapakProfile | null;
+};
+
 export type AuthState = {
   loading: boolean;
   user: User | null;
@@ -92,6 +115,9 @@ export type AuthState = {
   // Bumped every time the active company changes so data-fetching hooks can
   // depend on it to refetch after a company switch.
   companyVersion: number;
+  // Marketplace identity, hydrated once from GET /market/v1/me. Null for a
+  // customer (and for any non-marketplace user).
+  lapak: LapakProfile | null;
 };
 
 export type SignInParams = {

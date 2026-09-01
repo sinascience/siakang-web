@@ -22,6 +22,34 @@ type Props = {
   children: React.ReactNode;
 };
 
+/**
+ * SIAKANG marketplace personas. A marketplace user legitimately has no company
+ * — `/market/v1/*` is not company-scoped — so the company-resolution path below
+ * must not run for them: it would fire `/auth/companies` and a `switch-company`
+ * the marketplace contract says never happens in these flows.
+ */
+const MARKET_ROLES = ['customer', 'lapak'];
+
+function isMarketPersona(roles: string[]): boolean {
+  return roles.some((role) => MARKET_ROLES.includes(role));
+}
+
+/**
+ * Marketplace identity, fetched once per session. Fail-soft on purpose: a
+ * customer's session must not die because the market half of the API is down or
+ * not deployed yet, and `lapak: null` is the correct customer answer anyway.
+ */
+async function fetchLapak(roles: string[]) {
+  if (!isMarketPersona(roles)) return null;
+  try {
+    const marketMe = await authApi.getMarketMe();
+    return marketMe.lapak;
+  } catch (error) {
+    console.error('[auth] market identity unavailable:', error);
+    return null;
+  }
+}
+
 const INITIAL_STATE: AuthState = {
   loading: true,
   user: null,
@@ -31,6 +59,7 @@ const INITIAL_STATE: AuthState = {
   permissions: [],
   isSuperAdmin: false,
   companyVersion: 0,
+  lapak: null,
 };
 
 export function AuthProvider({ children }: Props) {
@@ -79,7 +108,9 @@ export function AuthProvider({ children }: Props) {
 
       const me = await authApi.getMe();
 
-      if (!me.company) {
+      const lapak = await fetchLapak(me.roles);
+
+      if (!me.company && !isMarketPersona(me.roles)) {
         const targetCompanyId = await resolveActiveCompanyId();
         if (targetCompanyId) {
           try {
@@ -95,6 +126,7 @@ export function AuthProvider({ children }: Props) {
               permissions: res.permissions,
               isSuperAdmin: me.is_super_admin,
               companyVersion: 0,
+              lapak,
             });
             return;
           } catch (switchError) {
@@ -102,7 +134,7 @@ export function AuthProvider({ children }: Props) {
             setActiveCompanyId(null);
           }
         }
-      } else {
+      } else if (me.company) {
         setActiveCompanyId(me.company.id);
       }
 
@@ -115,6 +147,7 @@ export function AuthProvider({ children }: Props) {
         permissions: me.permissions,
         isSuperAdmin: me.is_super_admin,
         companyVersion: 0,
+        lapak,
       });
     } catch (error) {
       console.error('[auth] session check failed:', error);
@@ -153,6 +186,7 @@ export function AuthProvider({ children }: Props) {
       permissions: res.permissions,
       isSuperAdmin: false,
       companyVersion: 0,
+      lapak: await fetchLapak(res.roles),
     });
   }, []);
 
@@ -178,6 +212,7 @@ export function AuthProvider({ children }: Props) {
       permissions: res.permissions,
       isSuperAdmin: false,
       companyVersion: 0,
+      lapak: await fetchLapak(res.roles),
     });
     return { isNewUser: res.is_new_user };
   }, []);
