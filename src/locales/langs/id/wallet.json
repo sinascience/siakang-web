@@ -1,0 +1,25 @@
+{
+  "title": "Dompet",
+  "balance": {
+    "label": "Saldo Tersedia"
+  },
+  "table": {
+    "createdAt": "Waktu",
+    "type": "Jenis",
+    "amount": "Jumlah"
+  },
+  "types": {
+    "topup": "Isi saldo",
+    "order_payment": "Pembayaran pesanan",
+    "platform_fee": "Biaya platform",
+    "payout": "Pencairan",
+    "refund": "Pengembalian dana"
+  },
+  "list": {
+    "emptyTitle": "Belum ada transaksi",
+    "emptySubtitle": "Riwayat transaksi dompet kamu akan muncul di sini."
+  },
+  "errors": {
+    "loadData": "Gagal memuat data dompet."
+  }
+}

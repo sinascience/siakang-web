@@ -1,0 +1,25 @@
+{
+  "title": "Wallet",
+  "balance": {
+    "label": "Available Balance"
+  },
+  "table": {
+    "createdAt": "Time",
+    "type": "Type",
+    "amount": "Amount"
+  },
+  "types": {
+    "topup": "Top up",
+    "order_payment": "Order payment",
+    "platform_fee": "Platform fee",
+    "payout": "Payout",
+    "refund": "Refund"
+  },
+  "list": {
+    "emptyTitle": "No transactions yet",
+    "emptySubtitle": "Your wallet activity will show up here."
+  },
+  "errors": {
+    "loadData": "Failed to load wallet data."
+  }
+}
