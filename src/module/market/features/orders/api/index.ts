@@ -111,3 +111,16 @@ export function addOrderItem(id: string, params: AddOrderItemParams): Promise<Or
 export function confirmOrder(id: string): Promise<Order> {
   return unwrap<Order>(axios.post(endpoints.market.orders.confirm(id)));
 }
+
+/**
+ * `POST /orders/{id}/complete` — the lapak marks a `paid` order as work-done.
+ * Moves the order to `awaiting_confirmation` and starts the customer's
+ * confirm countdown. No money moves here — the lapak is paid at `confirm`.
+ *
+ * A pending upsell item (added but unpaid) blocks this with a real `409`;
+ * callers surface that message rather than hiding the action, since the
+ * lapak needs to understand the customer still owes money.
+ */
+export function completeOrder(id: string): Promise<Order> {
+  return unwrap<Order>(axios.post(endpoints.market.orders.complete(id)));
+}

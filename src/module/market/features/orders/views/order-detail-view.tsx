@@ -31,10 +31,12 @@ import { PageHeader } from 'src/shared/ui/page-header';
 import { ErrorDialog } from 'src/shared/ui/error-dialog';
 import { DashboardContent } from 'src/layouts/dashboard';
 import { useTable, TableHeadCustom } from 'src/shared/ui/table';
+import { useAuthContext } from 'src/module/core/features/auth/hooks';
 
 import { useOrder } from '../hooks/use-order';
 import { usePayOrder } from '../hooks/use-pay-order';
 import { useConfirmOrder } from '../hooks/use-confirm-order';
+import { useCompleteOrder } from '../hooks/use-complete-order';
 import { OrderStatusLabel } from '../components/order-status-label';
 import { useConfirmCountdown } from '../hooks/use-confirm-countdown';
 import { OrderAddTierDialog } from '../components/order-add-tier-dialog';
@@ -46,6 +48,10 @@ export function OrderDetailView() {
   const { id } = useParams();
   const { t } = useTranslate('orders');
   const { t: tCommon } = useTranslate('common');
+  // `lapak` is non-null only for a lapak account — the authoritative persona
+  // signal (a customer and a lapak can both carry a market role).
+  const { lapak } = useAuthContext();
+  const isLapak = !!lapak;
 
   const { data: order, loading, notFound, error, refresh } = useOrder(id);
   // Same call whether this page was reached from a fresh checkout that failed
@@ -58,6 +64,12 @@ export function OrderDetailView() {
     error: confirmError,
     clearError: clearConfirmError,
   } = useConfirmOrder();
+  const {
+    complete,
+    loading: completing,
+    error: completeError,
+    clearError: clearCompleteError,
+  } = useCompleteOrder();
 
   // Flow-B upsell picker. Local state, not a URL param — opening it must not
   // re-render the whole detail page (docs/patterns/dialog-crud.md).
@@ -84,6 +96,15 @@ export function OrderDetailView() {
       toast.success(
         updated.auto_confirmed ? t('detail.confirmAlreadyAuto') : t('detail.confirmSuccess')
       );
+      refresh();
+    }
+  };
+
+  const handleComplete = async () => {
+    if (!order) return;
+    const updated = await complete(order.id);
+    if (updated) {
+      toast.success(t('detail.completeSuccess'));
       refresh();
     }
   };
@@ -126,13 +147,21 @@ export function OrderDetailView() {
     );
   }
 
-  const showCountdown = order.status === 'awaiting_confirmation' && !!order.confirm_deadline_at;
+  // Confirm is the customer's action, never the lapak's — an ungated Confirm
+  // next to the lapak's own Complete would let a lapak confirm their own work
+  // and pay themselves.
+  const showCountdown =
+    order.status === 'awaiting_confirmation' && !!order.confirm_deadline_at && !isLapak;
   // Whenever there is money left owing — not just `pending_payment` — this is
   // the one return path for an unpaid order, however the customer got here.
   const canPay = order.outstanding_idr > 0;
   // The upsell: another tier of the same gig, appended to THIS order. Allowed
   // while the order is `paid` and not yet completed, per the contract.
   const canAddTier = order.source === 'gig' && order.status === 'paid';
+  // Lapak-only: marks the work done and starts the customer's confirm
+  // countdown. Stays visible (never hidden) even when a pending upsell item
+  // will block it with a 409 — the lapak needs to see why, not guess.
+  const canComplete = isLapak && order.status === 'paid';
 
   return (
     <DashboardContent maxWidth="lg">
@@ -143,8 +172,8 @@ export function OrderDetailView() {
         titleVariant="h5"
         subtitle={t(`sources.${order.source}`)}
         action={
-          /* flexWrap: this row now carries up to four controls (status, chat,
-             add-tier, pay) and must not overflow on a narrow screen. */
+          /* flexWrap: this row now carries up to five controls (status, chat,
+             add-tier, pay, complete) and must not overflow on a narrow screen. */
           <Stack
             direction="row"
             spacing={1.5}
@@ -181,6 +210,16 @@ export function OrderDetailView() {
                 onClick={handlePay}
               >
                 {t('detail.payAction', { amount: formatIdr(order.outstanding_idr) })}
+              </Button>
+            )}
+            {canComplete && (
+              <Button
+                variant="contained"
+                loading={completing}
+                startIcon={<Iconify icon="solar:flag-bold" width={18} />}
+                onClick={handleComplete}
+              >
+                {t('detail.completeAction')}
               </Button>
             )}
           </Stack>
@@ -225,6 +264,11 @@ export function OrderDetailView() {
 
       <ErrorDialog open={!!payError} message={payError ?? ''} onClose={clearPayError} />
       <ErrorDialog open={!!confirmError} message={confirmError ?? ''} onClose={clearConfirmError} />
+      <ErrorDialog
+        open={!!completeError}
+        message={completeError ?? ''}
+        onClose={clearCompleteError}
+      />
     </DashboardContent>
   );
 }

@@ -86,7 +86,9 @@
     "addTierAction": "Add Tier",
     "confirmAction": "Confirm Completion",
     "confirmSuccess": "Order confirmed as completed.",
-    "confirmAlreadyAuto": "The deadline had already elapsed — this order was auto-confirmed."
+    "confirmAlreadyAuto": "The deadline had already elapsed — this order was auto-confirmed.",
+    "completeAction": "Mark Complete",
+    "completeSuccess": "Work marked complete — waiting on the customer's confirmation."
   },
   "errors": {
     "loadData": "Failed to load orders.",
@@ -94,6 +96,7 @@
     "createFailed": "Failed to create order.",
     "payFailed": "Failed to process payment.",
     "addItemFailed": "Failed to add the tier to this order.",
-    "confirmFailed": "Failed to confirm the order."
+    "confirmFailed": "Failed to confirm the order.",
+    "completeFailed": "Failed to mark the order complete."
   }
 }

@@ -86,7 +86,9 @@
     "addTierAction": "Tambah Paket",
     "confirmAction": "Konfirmasi Selesai",
     "confirmSuccess": "Pesanan dikonfirmasi selesai.",
-    "confirmAlreadyAuto": "Batas waktu sudah terlewati — pesanan dikonfirmasi otomatis."
+    "confirmAlreadyAuto": "Batas waktu sudah terlewati — pesanan dikonfirmasi otomatis.",
+    "completeAction": "Tandai Selesai",
+    "completeSuccess": "Pekerjaan ditandai selesai — menunggu konfirmasi pelanggan."
   },
   "errors": {
     "loadData": "Gagal memuat pesanan.",
@@ -94,6 +96,7 @@
     "createFailed": "Gagal membuat pesanan.",
     "payFailed": "Gagal memproses pembayaran.",
     "addItemFailed": "Gagal menambahkan paket ke pesanan.",
-    "confirmFailed": "Gagal mengonfirmasi pesanan."
+    "confirmFailed": "Gagal mengonfirmasi pesanan.",
+    "completeFailed": "Gagal menandai pesanan selesai."
   }
 }
