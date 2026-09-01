@@ -1,0 +1,84 @@
+{
+  "title": "Orders",
+  "subtitle": "Your orders — as a buyer and as a lapak.",
+  "statuses": {
+    "all": "All",
+    "pending_payment": "Pending Payment",
+    "paid": "Paid",
+    "awaiting_confirmation": "Awaiting Confirmation",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  },
+  "sources": {
+    "product": "Product",
+    "gig": "Gig",
+    "bid_auto": "Auto Bid",
+    "bid_manual": "Manual Bid"
+  },
+  "itemStatuses": {
+    "unpaid": "Unpaid",
+    "paid": "Paid"
+  },
+  "deliveryStatuses": {
+    "none": "None",
+    "preparing": "Preparing",
+    "shipped": "Shipped",
+    "delivered": "Delivered"
+  },
+  "table": {
+    "order": "Order",
+    "date": "Date",
+    "customer": "Customer",
+    "lapak": "Lapak",
+    "total": "Total",
+    "status": "Status",
+    "outstanding": "{{amount}} left"
+  },
+  "rowActions": {
+    "viewDetail": "View Detail"
+  },
+  "list": {
+    "emptyTitle": "No orders yet",
+    "emptySubtitle": "Orders you place or receive will show up here.",
+    "emptyFilteredTitle": "No orders with this status",
+    "emptyFilteredSubtitle": "Try another status tab to see your orders."
+  },
+  "items": {
+    "title": "Order Items",
+    "name": "Item",
+    "qty": "Qty",
+    "unitPrice": "Unit Price",
+    "subtotal": "Subtotal",
+    "status": "Status"
+  },
+  "totals": {
+    "total": "Total",
+    "paid": "Paid",
+    "outstanding": "Outstanding"
+  },
+  "payments": {
+    "title": "Payment History",
+    "empty": "No payments recorded for this order yet."
+  },
+  "detail": {
+    "title": "Order Detail",
+    "backToList": "Back to order list",
+    "notFoundTitle": "Order not found",
+    "notFoundSubtitle": "This order was deleted or the link is invalid.",
+    "summaryTitle": "Summary",
+    "partiesTitle": "Parties",
+    "orderDate": "Order Date",
+    "deliveryStatus": "Delivery Status",
+    "completedAt": "Completed At",
+    "autoConfirmed": "Auto-confirmed (deadline elapsed)",
+    "customerConfirmed": "Confirmed by customer",
+    "customerName": "Customer",
+    "lapakName": "Lapak",
+    "confirmCountdownLabel": "Waiting on customer confirmation",
+    "confirmDeadlinePassed": "Deadline passed — waiting on auto-confirmation"
+  },
+  "errors": {
+    "loadData": "Failed to load orders.",
+    "loadDetail": "Failed to load order detail."
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "title": "Pesanan",
+  "subtitle": "Daftar pesanan Anda — sebagai pembeli maupun sebagai lapak.",
+  "statuses": {
+    "all": "Semua",
+    "pending_payment": "Menunggu Pembayaran",
+    "paid": "Dibayar",
+    "awaiting_confirmation": "Menunggu Konfirmasi",
+    "completed": "Selesai",
+    "cancelled": "Dibatalkan"
+  },
+  "sources": {
+    "product": "Produk",
+    "gig": "Gig",
+    "bid_auto": "Lelang Otomatis",
+    "bid_manual": "Lelang Manual"
+  },
+  "itemStatuses": {
+    "unpaid": "Belum Dibayar",
+    "paid": "Dibayar"
+  },
+  "deliveryStatuses": {
+    "none": "Belum Ada",
+    "preparing": "Disiapkan",
+    "shipped": "Dikirim",
+    "delivered": "Diterima"
+  },
+  "table": {
+    "order": "Pesanan",
+    "date": "Tanggal",
+    "customer": "Pelanggan",
+    "lapak": "Lapak",
+    "total": "Total",
+    "status": "Status",
+    "outstanding": "Sisa {{amount}}"
+  },
+  "rowActions": {
+    "viewDetail": "Lihat Detail"
+  },
+  "list": {
+    "emptyTitle": "Belum ada pesanan",
+    "emptySubtitle": "Pesanan yang Anda buat atau terima akan muncul di sini.",
+    "emptyFilteredTitle": "Tidak ada pesanan dengan status ini",
+    "emptyFilteredSubtitle": "Coba pilih tab status lain untuk melihat pesanan Anda."
+  },
+  "items": {
+    "title": "Item Pesanan",
+    "name": "Item",
+    "qty": "Qty",
+    "unitPrice": "Harga Satuan",
+    "subtotal": "Subtotal",
+    "status": "Status"
+  },
+  "totals": {
+    "total": "Total",
+    "paid": "Sudah Dibayar",
+    "outstanding": "Sisa Tagihan"
+  },
+  "payments": {
+    "title": "Riwayat Pembayaran",
+    "empty": "Belum ada pembayaran untuk pesanan ini."
+  },
+  "detail": {
+    "title": "Detail Pesanan",
+    "backToList": "Kembali ke daftar pesanan",
+    "notFoundTitle": "Pesanan tidak ditemukan",
+    "notFoundSubtitle": "Pesanan sudah dihapus atau tautannya tidak valid.",
+    "summaryTitle": "Ringkasan",
+    "partiesTitle": "Pihak Terkait",
+    "orderDate": "Tanggal Pesan",
+    "deliveryStatus": "Status Pengiriman",
+    "completedAt": "Diselesaikan Pada",
+    "autoConfirmed": "Dikonfirmasi otomatis (batas waktu terlewati)",
+    "customerConfirmed": "Dikonfirmasi oleh pelanggan",
+    "customerName": "Pelanggan",
+    "lapakName": "Lapak",
+    "confirmCountdownLabel": "Menunggu konfirmasi pelanggan",
+    "confirmDeadlinePassed": "Batas waktu terlewati — menunggu konfirmasi otomatis"
+  },
+  "errors": {
+    "loadData": "Gagal memuat pesanan.",
+    "loadDetail": "Gagal memuat detail pesanan."
+  }
+}
