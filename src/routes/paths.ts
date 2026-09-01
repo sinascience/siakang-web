@@ -23,6 +23,9 @@ export const paths = {
       users: '/settings/users',
       translationOverride: '/settings/translation-override',
     },
+    market: {
+      wallet: '/market/wallet',
+    },
     demo: {
       item: '/demo/item',
       itemEmpty: '/demo/item-empty',

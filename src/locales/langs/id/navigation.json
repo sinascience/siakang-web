@@ -33,5 +33,10 @@
       "markAllRead": "Tandai semua dibaca",
       "seeAll": "Lihat semua notifikasi"
     }
+  },
+  "market": {
+    "customer": "Marketplace",
+    "lapak": "Lapak Saya",
+    "wallet": "Dompet"
   }
 }

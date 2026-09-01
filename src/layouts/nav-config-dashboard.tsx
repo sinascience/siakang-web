@@ -9,6 +9,7 @@ import { useTranslate } from 'src/locales';
 import { CONFIG } from 'src/shared/config';
 import { SvgColor } from 'src/shared/ui/svg-color';
 import { usePermission } from 'src/module/core/features/auth/hooks/use-permission';
+import { useAuthContext } from 'src/module/core/features/auth/hooks/use-auth-context';
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +24,13 @@ const ICONS = {
   sales: icon('ic-ecommerce'),
   demoItem: icon('ic-menu-item'),
   demoOrder: icon('ic-order'),
+  wallet: icon('ic-banking'),
 };
+
+// SIAKANG marketplace personas. A marketplace user gets the market shell
+// instead of the Tuai back-office nav — they have no company, and none of the
+// back-office screens apply to them.
+const MARKET_ROLES = ['customer', 'lapak'];
 
 // ----------------------------------------------------------------------
 
@@ -69,8 +76,31 @@ function filterNav(
 export function useNavData(): NavSectionProps['data'] {
   const { t } = useTranslate('navigation');
   const { can, canAny } = usePermission();
+  const { roles, lapak } = useAuthContext();
+
+  const isMarketUser = roles.some((role) => MARKET_ROLES.includes(role));
+  // `lapak` is non-null only for a lapak account (GET /market/v1/me), so it is
+  // the authoritative persona signal; roles alone would also match a customer.
+  const isLapak = !!lapak;
 
   return useMemo(() => {
+    if (isMarketUser) {
+      // Marketplace nav is not permission-gated: /market/v1/* runs JWTAuth()
+      // only, so `permissions` is empty for these users by design.
+      return [
+        {
+          subheader: isLapak ? t('market.lapak') : t('market.customer'),
+          items: [
+            {
+              title: t('market.wallet'),
+              path: paths.dashboard.market.wallet,
+              icon: ICONS.wallet,
+            },
+          ],
+        },
+      ];
+    }
+
     const sections: NavSectionProps['data'] = [
       {
         items: [
@@ -122,5 +152,5 @@ export function useNavData(): NavSectionProps['data'] {
     return sections
       .map((section) => ({ ...section, items: filterNav(section.items, can, canAny) }))
       .filter((section) => section.items.length > 0);
-  }, [t, can, canAny]);
+  }, [t, can, canAny, isMarketUser, isLapak]);
 }

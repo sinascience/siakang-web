@@ -33,5 +33,10 @@
       "markAllRead": "Mark all as read",
       "seeAll": "See all notifications"
     }
+  },
+  "market": {
+    "customer": "Marketplace",
+    "lapak": "My Lapak",
+    "wallet": "Wallet"
   }
 }
