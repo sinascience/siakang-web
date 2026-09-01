@@ -1,5 +1,5 @@
 import type { ApiEnvelope } from 'src/module/core/features/auth/types';
-import type { Order, ListMeta, OrderCounts, OrderListParams } from '../types';
+import type { Order, Payment, ListMeta, OrderCounts, OrderListParams } from '../types';
 
 import axios, { endpoints, flattenFieldErrors } from 'src/shared/lib/axios';
 
@@ -51,4 +51,43 @@ export async function listOrders(
 
 export function getOrder(id: string): Promise<Order> {
   return unwrap<Order>(axios.get(endpoints.market.orders.byId(id)));
+}
+
+// ----------------------------------------------------------------------
+// Write side (FE-B) — `orders/types/index.ts` is outside this task's
+// allowed_paths, so the request/response shapes that FE-G's read side didn't
+// need live here instead, next to the calls that use them.
+// ----------------------------------------------------------------------
+
+/** `CreateOrderRequest` from the contract — exactly one of `product_id` / `gig_tier_id`. */
+export type CreateOrderParams = {
+  product_id?: string;
+  gig_tier_id?: string;
+  /** min 1, default 1 — products only. */
+  quantity?: number;
+};
+
+/** `PayResult` from the contract. `wallet_balance_idr` is the balance AFTER the charge. */
+export type PayResult = {
+  order: Order;
+  payment: Payment;
+  wallet_balance_idr: number;
+};
+
+/**
+ * `POST /orders` — creates the order in `pending_payment` with one unpaid
+ * item. No money moves here; the price comes from the server's own product
+ * lookup. Never send a price.
+ */
+export function createOrder(params: CreateOrderParams): Promise<Order> {
+  return unwrap<Order>(axios.post(endpoints.market.orders.list, params));
+}
+
+/**
+ * `POST /orders/{id}/pay` — charges `order.outstanding_idr` in one
+ * transaction. Insufficient balance is a real `402`; the order is left
+ * untouched and still payable, so callers can retry with the SAME id.
+ */
+export function payOrder(id: string): Promise<PayResult> {
+  return unwrap<PayResult>(axios.post(endpoints.market.orders.pay(id)));
 }

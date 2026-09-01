@@ -1,0 +1,23 @@
+{
+  "title": "Katalog",
+  "subtitle": "Jelajahi produk yang ditawarkan lapak — pesan dan bayar langsung dari saldo Anda.",
+  "list": {
+    "emptyTitle": "Belum ada produk",
+    "emptySubtitle": "Produk dari lapak akan muncul di sini."
+  },
+  "detail": {
+    "title": "Detail Produk",
+    "backToList": "Kembali ke katalog",
+    "notFoundTitle": "Produk tidak ditemukan",
+    "notFoundSubtitle": "Produk sudah tidak tersedia atau tautannya tidak valid.",
+    "checkout": "Pesan & Bayar {{amount}}",
+    "retryPay": "Coba Bayar Lagi",
+    "paySuccess": "Pembayaran berhasil.",
+    "orderPendingHint": "Pesanan Anda sudah tersimpan dan bisa dibayar kapan saja.",
+    "viewOrder": "Lihat pesanan"
+  },
+  "errors": {
+    "loadData": "Gagal memuat produk.",
+    "loadDetail": "Gagal memuat detail produk."
+  }
+}

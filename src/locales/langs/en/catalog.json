@@ -1,0 +1,23 @@
+{
+  "title": "Catalog",
+  "subtitle": "Browse products offered by lapak — order and pay straight from your wallet.",
+  "list": {
+    "emptyTitle": "No products yet",
+    "emptySubtitle": "Products from lapak will show up here."
+  },
+  "detail": {
+    "title": "Product Detail",
+    "backToList": "Back to catalog",
+    "notFoundTitle": "Product not found",
+    "notFoundSubtitle": "This product is no longer available or the link is invalid.",
+    "checkout": "Order & Pay {{amount}}",
+    "retryPay": "Retry Payment",
+    "paySuccess": "Payment successful.",
+    "orderPendingHint": "Your order is saved and can be paid at any time.",
+    "viewOrder": "View order"
+  },
+  "errors": {
+    "loadData": "Failed to load products.",
+    "loadDetail": "Failed to load product detail."
+  }
+}

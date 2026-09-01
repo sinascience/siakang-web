@@ -72,10 +72,14 @@
     "customerName": "Customer",
     "lapakName": "Lapak",
     "confirmCountdownLabel": "Waiting on customer confirmation",
-    "confirmDeadlinePassed": "Deadline passed — waiting on auto-confirmation"
+    "confirmDeadlinePassed": "Deadline passed — waiting on auto-confirmation",
+    "payAction": "Pay {{amount}}",
+    "paySuccess": "Payment successful."
   },
   "errors": {
     "loadData": "Failed to load orders.",
-    "loadDetail": "Failed to load order detail."
+    "loadDetail": "Failed to load order detail.",
+    "createFailed": "Failed to create order.",
+    "payFailed": "Failed to process payment."
   }
 }

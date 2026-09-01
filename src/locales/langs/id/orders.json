@@ -72,10 +72,14 @@
     "customerName": "Pelanggan",
     "lapakName": "Lapak",
     "confirmCountdownLabel": "Menunggu konfirmasi pelanggan",
-    "confirmDeadlinePassed": "Batas waktu terlewati — menunggu konfirmasi otomatis"
+    "confirmDeadlinePassed": "Batas waktu terlewati — menunggu konfirmasi otomatis",
+    "payAction": "Bayar {{amount}}",
+    "paySuccess": "Pembayaran berhasil."
   },
   "errors": {
     "loadData": "Gagal memuat pesanan.",
-    "loadDetail": "Gagal memuat detail pesanan."
+    "loadDetail": "Gagal memuat detail pesanan.",
+    "createFailed": "Gagal membuat pesanan.",
+    "payFailed": "Gagal memproses pembayaran."
   }
 }

@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import TableRow from '@mui/material/TableRow';
 import Skeleton from '@mui/material/Skeleton';
@@ -20,13 +21,16 @@ import { useParams } from 'src/routes/hooks';
 import { useTranslate } from 'src/locales';
 import { Label } from 'src/shared/ui/label';
 import { fDateTime } from 'src/shared/utils';
+import { toast } from 'src/shared/ui/snackbar';
 import { Iconify } from 'src/shared/ui/iconify';
 import { Scrollbar } from 'src/shared/ui/scrollbar';
 import { PageHeader } from 'src/shared/ui/page-header';
+import { ErrorDialog } from 'src/shared/ui/error-dialog';
 import { DashboardContent } from 'src/layouts/dashboard';
 import { useTable, TableHeadCustom } from 'src/shared/ui/table';
 
 import { useOrder } from '../hooks/use-order';
+import { usePayOrder } from '../hooks/use-pay-order';
 import { OrderStatusLabel } from '../components/order-status-label';
 import { useConfirmCountdown } from '../hooks/use-confirm-countdown';
 import { formatIdr, formatOrderCode, formatCountdownClock } from '../utils/format';
@@ -38,9 +42,22 @@ export function OrderDetailView() {
   const { t } = useTranslate('orders');
   const { t: tCommon } = useTranslate('common');
 
-  const { data: order, loading, notFound, error } = useOrder(id);
+  const { data: order, loading, notFound, error, refresh } = useOrder(id);
+  // Same call whether this page was reached from a fresh checkout that failed
+  // to pay, or from the orders list `pending_payment` tab — the return path
+  // for any unpaid order is this one Pay action, retried against the same id.
+  const { pay, loading: paying, error: payError, clearError: clearPayError } = usePayOrder();
 
   const backHref = paths.dashboard.market.orders;
+
+  const handlePay = async () => {
+    if (!order) return;
+    const result = await pay(order.id);
+    if (result) {
+      toast.success(t('detail.paySuccess'));
+      refresh();
+    }
+  };
 
   if (loading) {
     return (
@@ -81,6 +98,9 @@ export function OrderDetailView() {
   }
 
   const showCountdown = order.status === 'awaiting_confirmation' && !!order.confirm_deadline_at;
+  // Whenever there is money left owing — not just `pending_payment` — this is
+  // the one return path for an unpaid order, however the customer got here.
+  const canPay = order.outstanding_idr > 0;
 
   return (
     <DashboardContent maxWidth="lg">
@@ -90,7 +110,21 @@ export function OrderDetailView() {
         title={formatOrderCode(order.id)}
         titleVariant="h5"
         subtitle={t(`sources.${order.source}`)}
-        action={<OrderStatusLabel status={order.status} variant="filled" />}
+        action={
+          <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
+            <OrderStatusLabel status={order.status} variant="filled" />
+            {canPay && (
+              <Button
+                variant="contained"
+                loading={paying}
+                startIcon={<Iconify icon="solar:wad-of-money-bold" width={18} />}
+                onClick={handlePay}
+              >
+                {t('detail.payAction', { amount: formatIdr(order.outstanding_idr) })}
+              </Button>
+            )}
+          </Stack>
+        }
       />
 
       <Box
@@ -110,6 +144,8 @@ export function OrderDetailView() {
           <OrderPaymentsCard order={order} />
         </Stack>
       </Box>
+
+      <ErrorDialog open={!!payError} message={payError ?? ''} onClose={clearPayError} />
     </DashboardContent>
   );
 }
