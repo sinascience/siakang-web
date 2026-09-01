@@ -1,0 +1,30 @@
+{
+  "title": "Percakapan",
+  "list": {
+    "noMessage": "Belum ada pesan",
+    "emptyTitle": "Belum ada percakapan",
+    "emptySubtitle": "Percakapan terbuka otomatis setelah pesanan dibuat."
+  },
+  "thread": {
+    "title": "Percakapan",
+    "viewOrder": "Lihat pesanan",
+    "emptyTitle": "Mulai percakapan",
+    "emptySubtitle": "Kirim pesan pertama untuk membahas pekerjaan ini."
+  },
+  "stream": {
+    "live": "Terhubung langsung",
+    "connecting": "Menyambungkan...",
+    "offline": "Pembaruan langsung tidak aktif. Muat ulang halaman untuk melihat pesan terbaru."
+  },
+  "composer": {
+    "placeholder": "Tulis pesan...",
+    "send": "Kirim pesan",
+    "tooLong": "Pesan maksimal {{max}} karakter."
+  },
+  "errors": {
+    "loadThreads": "Gagal memuat daftar percakapan.",
+    "loadMessages": "Gagal memuat pesan.",
+    "sendTitle": "Pesan Gagal Dikirim",
+    "send": "Pesan gagal dikirim. Coba lagi."
+  }
+}

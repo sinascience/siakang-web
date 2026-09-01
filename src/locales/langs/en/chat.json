@@ -1,0 +1,30 @@
+{
+  "title": "Chat",
+  "list": {
+    "noMessage": "No messages yet",
+    "emptyTitle": "No conversations yet",
+    "emptySubtitle": "A conversation opens automatically once an order is created."
+  },
+  "thread": {
+    "title": "Conversation",
+    "viewOrder": "View order",
+    "emptyTitle": "Start the conversation",
+    "emptySubtitle": "Send the first message to discuss this job."
+  },
+  "stream": {
+    "live": "Connected live",
+    "connecting": "Connecting...",
+    "offline": "Live updates are off. Reload the page to see new messages."
+  },
+  "composer": {
+    "placeholder": "Write a message...",
+    "send": "Send message",
+    "tooLong": "A message can be at most {{max}} characters."
+  },
+  "errors": {
+    "loadThreads": "Failed to load conversations.",
+    "loadMessages": "Failed to load messages.",
+    "sendTitle": "Message Not Sent",
+    "send": "The message could not be sent. Please try again."
+  }
+}
