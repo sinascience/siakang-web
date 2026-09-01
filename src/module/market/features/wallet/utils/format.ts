@@ -1,6 +1,3 @@
-import type { LedgerEntryType } from '../types';
-import type { LabelColor } from 'src/shared/ui/label';
-
 import i18n from 'i18next';
 
 // ----------------------------------------------------------------------
@@ -34,11 +31,3 @@ export function formatSignedIdr(amountIdr: number): string {
   const formatted = formatIdr(amountIdr);
   return amountIdr > 0 ? `+${formatted}` : formatted;
 }
-
-export const LEDGER_TYPE_COLOR: Record<LedgerEntryType, LabelColor> = {
-  topup: 'success',
-  refund: 'success',
-  order_payment: 'error',
-  platform_fee: 'error',
-  payout: 'error',
-};

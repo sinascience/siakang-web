@@ -25,8 +25,8 @@ import {
 } from 'src/shared/ui/table';
 
 import { useWallet } from '../hooks/use-wallet';
+import { formatSignedIdr } from '../utils/format';
 import { useWalletLedger } from '../hooks/use-wallet-ledger';
-import { formatSignedIdr, LEDGER_TYPE_COLOR } from '../utils/format';
 import { WalletBalanceCard } from '../components/wallet-balance-card';
 
 // ----------------------------------------------------------------------
@@ -89,7 +89,7 @@ export function WalletView() {
 
                       <TableCell>
                         <Stack spacing={0.5} sx={{ alignItems: 'flex-start' }}>
-                          <Label variant="soft" color={LEDGER_TYPE_COLOR[row.type]}>
+                          <Label variant="soft" color={row.amount_idr < 0 ? 'error' : 'success'}>
                             {t(`types.${row.type}`)}
                           </Label>
                           {row.note && (
