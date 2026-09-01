@@ -410,6 +410,24 @@ const ROUTES: Route[] = [
       order.outstanding_idr = 0;
       order.status = 'paid';
 
+      // Contract amendment 2026-09-02 (dual-signed): a thread opens when an
+      // order is first paid, whatever its source — not only for gig orders.
+      // `whichever happens first` is why this is conditional: a bid order
+      // already has its thread from when the bid produced it, and one order
+      // must never end up with two.
+      if (!order.chat_thread_id) {
+        const thread = {
+          id: nextId('6'),
+          order_id: order.id,
+          customer: CUSTOMER,
+          lapak: order.lapak,
+          created_at: new Date().toISOString(),
+        };
+        CHAT_THREADS.unshift(thread);
+        CHAT_MESSAGES[thread.id] = [];
+        order.chat_thread_id = thread.id;
+      }
+
       WALLET.balance_idr -= amount;
       LEDGER.unshift({
         id: nextId('3'),
