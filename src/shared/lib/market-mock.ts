@@ -50,6 +50,20 @@ const LAPAK_SARI = {
   is_available: true,
 };
 
+const LAPAK_AGUS = {
+  id: '11111111-1111-4111-8111-333333333333',
+  user_id: '21111111-1111-4111-8111-333333333333',
+  name: 'Tukang Kebun Agus',
+  description: 'Perawatan taman dan kebun.',
+  // Nearest of the three to the customer's seeded coordinates, and the best
+  // rated — and unavailable. Exists so "unavailable lapaks are never proposed"
+  // is provable rather than vacuous.
+  lat: -7.9670,
+  lng: 112.6330,
+  rating: 5.0,
+  is_available: false,
+};
+
 const CUSTOMER = { id: '20000000-0000-4000-8000-000000000000', full_name: 'Budi Santoso' };
 
 type LapakSummary = { id: string; name: string; rating: number };
@@ -361,6 +375,80 @@ const CHAT_MESSAGES: Record<string, MockMessage[]> = {
   ],
 };
 
+// ---------------------------------------------------------------- bids
+
+const BID_CATEGORIES = [
+  { id: '44111111-1111-4111-8111-111111111111', name: 'Bersih-bersih rumah', slug: 'cleaning' },
+  { id: '44111111-1111-4111-8111-222222222222', name: 'Perawatan taman', slug: 'gardening' },
+];
+
+/** Every seeded lapak takes work in any seeded category in sprint 1. */
+const BID_LAPAKS = [LAPAK_JOKO, LAPAK_SARI, LAPAK_AGUS];
+
+type MockOffer = {
+  id: string;
+  bid_id: string;
+  lapak: LapakSummary;
+  amount_idr: number;
+  message: string | null;
+  status: 'pending' | 'awarded' | 'rejected';
+  created_at: string;
+};
+
+type MockBid = {
+  id: string;
+  mode: 'auto' | 'manual';
+  status: string;
+  category: (typeof BID_CATEGORIES)[number];
+  customer: typeof CUSTOMER;
+  title: string;
+  description: string | null;
+  budget_idr: number;
+  lat: number;
+  lng: number;
+  fee_paid_idr: number;
+  matched_lapak: LapakSummary | null;
+  matched_distance_km: number | null;
+  offer_count: number;
+  accepted_offer_id: string | null;
+  order_id: string | null;
+  off_platform_risk: boolean;
+  created_at: string;
+};
+
+const BIDS: MockBid[] = [];
+const OFFERS: MockOffer[] = [];
+
+/** Haversine, in km — the same rule the backend applies over seeded lat/lng. */
+function distanceKm(aLat: number, aLng: number, bLat: number, bLng: number): number {
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
+  const R = 6371;
+  const dLat = toRad(bLat - aLat);
+  const dLng = toRad(bLng - aLng);
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(aLat)) * Math.cos(toRad(bLat)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+/**
+ * Nearest available lapak wins; rating breaks a distance tie. Deliberately NOT
+ * rating-first: with the seeded set that distinction is the whole of criterion
+ * 4 — joko is nearest, sari is rated higher and must still lose, and agus is
+ * nearest AND best-rated but unavailable, so he must never be proposed.
+ */
+function matchLapak(lat: number, lng: number) {
+  const candidates = BID_LAPAKS.filter((l) => l.is_available)
+    .map((l) => ({ lapak: l, km: distanceKm(lat, lng, l.lat, l.lng) }))
+    .sort((a, b) => a.km - b.km || b.lapak.rating - a.lapak.rating);
+  return candidates[0];
+}
+
+/** The contract's `Bid` shape — the mock stores nothing extra, so this is identity. */
+function bidView(bid: MockBid): MockBid {
+  return bid;
+}
+
 // ---------------------------------------------------------------- helpers
 
 function envelope<T>(data: T, meta: Record<string, unknown> | null = null): Envelope<T> {
@@ -433,6 +521,68 @@ function sessionFor(account: SeededAccount) {
     expires_in: 3600,
     ...meFor(account),
   };
+}
+
+/** The customer's seeded coordinates — matching origin when a bid omits them. */
+const CUSTOMER_LAT = -7.97;
+const CUSTOMER_LNG = 112.63;
+
+/**
+ * A bid that reached agreement produces a tracked order, `pending_payment`,
+ * with a chat thread for the pair — the thread opens here rather than at first
+ * payment, per contract v1.0.2's "whichever happens first".
+ */
+function createBidOrder(
+  bid: MockBid,
+  lapak: LapakSummary,
+  amountIdr: number,
+  source: 'bid_auto' | 'bid_manual'
+): MockOrder {
+  const now = new Date().toISOString();
+  const order: MockOrder = {
+    id: nextId('5'),
+    source,
+    status: 'pending_payment',
+    customer: bid.customer,
+    lapak,
+    items: [
+      {
+        id: nextId('8'),
+        product_id: null,
+        gig_tier_id: null,
+        gig_id: null,
+        name: bid.title,
+        unit_price_idr: amountIdr,
+        quantity: 1,
+        subtotal_idr: amountIdr,
+        status: 'unpaid',
+        created_at: now,
+      },
+    ],
+    payments: [],
+    total_idr: amountIdr,
+    paid_idr: 0,
+    outstanding_idr: amountIdr,
+    bid_id: bid.id,
+    chat_thread_id: null,
+    delivery_status: 'none',
+    confirm_deadline_at: null,
+    auto_confirmed: false,
+    completed_at: null,
+    created_at: now,
+  };
+  const thread = {
+    id: nextId('6'),
+    order_id: order.id,
+    customer: bid.customer,
+    lapak,
+    created_at: now,
+  };
+  CHAT_THREADS.unshift(thread);
+  CHAT_MESSAGES[thread.id] = [];
+  order.chat_thread_id = thread.id;
+  ORDERS.unshift(order);
+  return order;
 }
 
 // ---------------------------------------------------------------- routes
@@ -787,6 +937,292 @@ const ROUTES: Route[] = [
       order.confirm_deadline_at = null;
       order.auto_confirmed = false;
       return { status: 200, body: envelope(order) };
+    },
+  },
+
+  // ---- phase 4: bids ----
+  {
+    method: 'get',
+    path: /^\/market\/v1\/bid-categories$/,
+    reply: () => ({ status: 200, body: envelope(BID_CATEGORIES) }),
+  },
+  {
+    method: 'get',
+    path: /^\/market\/v1\/bids$/,
+    reply: (config) => {
+      const account = caller(config);
+      if (!account) return { status: 401, body: unauthorized() };
+      const params = (config.params ?? {}) as { mode?: string; status?: string };
+      // Persona-scoped, like orders: a customer sees their own bids; a lapak
+      // sees open manual bids plus the automatic ones it was matched to.
+      let rows = account.lapak
+        ? BIDS.filter(
+            (b) =>
+              (b.mode === 'manual' && b.status === 'open') ||
+              b.matched_lapak?.id === account.lapak?.id
+          )
+        : BIDS.filter((b) => b.customer.id === account.user.id);
+      if (params.mode) rows = rows.filter((b) => b.mode === params.mode);
+      if (params.status) rows = rows.filter((b) => b.status === params.status);
+      const page = paginate(rows.map(bidView), config);
+      return { status: 200, body: envelope(page.rows, { pagination: page.pagination }) };
+    },
+  },
+  {
+    method: 'post',
+    path: /^\/market\/v1\/bids$/,
+    reply: (config) => {
+      const account = caller(config);
+      if (!account) return { status: 401, body: unauthorized() };
+      if (account.lapak) {
+        return {
+          status: 403,
+          body: errorBody('detail', 'Hanya pelanggan yang dapat membuat bid.'),
+        };
+      }
+      const body = bodyOf<{
+        mode?: 'auto' | 'manual';
+        category_id?: string;
+        title?: string;
+        description?: string;
+        budget_idr?: number;
+        lat?: number;
+        lng?: number;
+      }>(config);
+
+      const category = BID_CATEGORIES.find((c) => c.id === body.category_id);
+      if (!category) return { status: 404, body: notFound() };
+      if (!body.budget_idr || body.budget_idr < 1) {
+        return { status: 422, body: errorBody('budget_idr', 'Anggaran wajib diisi.') };
+      }
+      if (body.mode !== 'auto' && body.mode !== 'manual') {
+        return { status: 422, body: errorBody('mode', 'Mode bid tidak valid.') };
+      }
+
+      const wallet = WALLETS[account.login];
+      const now = new Date().toISOString();
+      const bid: MockBid = {
+        id: nextId('b'),
+        mode: body.mode,
+        status: body.mode === 'manual' ? 'open' : 'matching',
+        category,
+        customer: { id: account.user.id, full_name: account.user.full_name },
+        title: body.title ?? category.name,
+        description: body.description ?? null,
+        budget_idr: body.budget_idr,
+        lat: body.lat ?? CUSTOMER_LAT,
+        lng: body.lng ?? CUSTOMER_LNG,
+        fee_paid_idr: 0,
+        matched_lapak: null,
+        matched_distance_km: null,
+        offer_count: 0,
+        accepted_offer_id: null,
+        order_id: null,
+        // Manual bids carry the off-platform risk: nothing is tracked until the
+        // customer awards on-platform.
+        off_platform_risk: body.mode === 'manual',
+        created_at: now,
+      };
+
+      if (bid.mode === 'manual') {
+        // Free to post; the 10 000 fee is charged at award, not here.
+        BIDS.unshift(bid);
+        return { status: 201, body: envelope(bidView(bid)) };
+      }
+
+      // Automatic: the fee is charged BEFORE matching runs, per the contract.
+      const fee = CONFIG_ROW.bid_auto_fee_idr;
+      if (wallet.balance_idr < fee) {
+        return {
+          status: 402,
+          body: errorBody('detail', 'Saldo tidak mencukupi untuk biaya bid.'),
+        };
+      }
+      wallet.balance_idr -= fee;
+      LEDGERS[account.login].unshift({
+        id: nextId('3'),
+        type: 'platform_fee',
+        amount_idr: -fee,
+        balance_after_idr: wallet.balance_idr,
+        order_id: null,
+        bid_id: bid.id,
+        note: 'Biaya bid otomatis',
+        created_at: now,
+      });
+      bid.fee_paid_idr = fee;
+
+      const match = matchLapak(bid.lat, bid.lng);
+      if (!match) {
+        // Nobody available: refund in the same step. Charging for a match that
+        // never happened would be a real money bug, not a corner case.
+        wallet.balance_idr += fee;
+        LEDGERS[account.login].unshift({
+          id: nextId('3'),
+          type: 'refund',
+          amount_idr: fee,
+          balance_after_idr: wallet.balance_idr,
+          order_id: null,
+          bid_id: bid.id,
+          note: 'Pengembalian biaya bid (tidak ada tukang tersedia)',
+          created_at: new Date().toISOString(),
+        });
+        bid.fee_paid_idr = 0;
+        bid.status = 'no_match';
+      } else {
+        bid.status = 'proposed';
+        bid.matched_lapak = lapakSummary(match.lapak);
+        bid.matched_distance_km = Math.round(match.km * 1000) / 1000;
+      }
+      BIDS.unshift(bid);
+      return { status: 201, body: envelope(bidView(bid)) };
+    },
+  },
+  {
+    method: 'get',
+    path: /^\/market\/v1\/bids\/[^/]+$/,
+    reply: (config) => {
+      const bid = BIDS.find((b) => b.id === segment(config, 0));
+      if (!bid) return { status: 404, body: notFound() };
+      return { status: 200, body: envelope(bidView(bid)) };
+    },
+  },
+  {
+    method: 'post',
+    path: /^\/market\/v1\/bids\/[^/]+\/confirm$/,
+    reply: (config) => {
+      const account = caller(config);
+      const bid = BIDS.find((b) => b.id === segment(config, 1));
+      if (!account) return { status: 401, body: unauthorized() };
+      if (!bid) return { status: 404, body: notFound() };
+      if (bid.customer.id !== account.user.id) {
+        return { status: 403, body: errorBody('detail', 'Bukan bid Anda.') };
+      }
+      if (bid.status !== 'proposed') {
+        return { status: 409, body: errorBody('detail', 'Bid tidak dalam status proposed.') };
+      }
+      bid.status = 'customer_confirmed';
+      return { status: 200, body: envelope(bidView(bid)) };
+    },
+  },
+  {
+    method: 'post',
+    path: /^\/market\/v1\/bids\/[^/]+\/accept$/,
+    reply: (config) => {
+      const account = caller(config);
+      const bid = BIDS.find((b) => b.id === segment(config, 1));
+      if (!account) return { status: 401, body: unauthorized() };
+      if (!bid) return { status: 404, body: notFound() };
+      if (!account.lapak || bid.matched_lapak?.id !== account.lapak.id) {
+        return { status: 403, body: errorBody('detail', 'Bukan tukang yang dicocokkan.') };
+      }
+      if (bid.status !== 'customer_confirmed') {
+        return { status: 409, body: errorBody('detail', 'Pelanggan belum mengonfirmasi.') };
+      }
+      const order = createBidOrder(bid, bid.matched_lapak, bid.budget_idr, 'bid_auto');
+      bid.status = 'ordered';
+      bid.order_id = order.id;
+      return { status: 200, body: envelope(bidView(bid)) };
+    },
+  },
+  {
+    method: 'get',
+    path: /^\/market\/v1\/bids\/[^/]+\/offers$/,
+    reply: (config) => {
+      const bid = BIDS.find((b) => b.id === segment(config, 1));
+      if (!bid) return { status: 404, body: notFound() };
+      const rows = OFFERS.filter((o) => o.bid_id === bid.id).sort(
+        (a, b) => a.amount_idr - b.amount_idr
+      );
+      return { status: 200, body: envelope(rows) };
+    },
+  },
+  {
+    method: 'post',
+    path: /^\/market\/v1\/bids\/[^/]+\/offers$/,
+    reply: (config) => {
+      const account = caller(config);
+      const bid = BIDS.find((b) => b.id === segment(config, 1));
+      if (!account) return { status: 401, body: unauthorized() };
+      if (!bid) return { status: 404, body: notFound() };
+      if (!account.lapak) {
+        return { status: 403, body: errorBody('detail', 'Hanya tukang yang dapat menawar.') };
+      }
+      if (bid.mode !== 'manual' || bid.status !== 'open') {
+        return { status: 409, body: errorBody('detail', 'Bid tidak menerima penawaran.') };
+      }
+      const body = bodyOf<{ amount_idr?: number; message?: string }>(config);
+      if (!body.amount_idr || body.amount_idr < 1) {
+        return { status: 422, body: errorBody('amount_idr', 'Nominal penawaran wajib diisi.') };
+      }
+      // One offer per lapak per bid — posting again REPLACES, per the contract.
+      const existing = OFFERS.find((o) => o.bid_id === bid.id && o.lapak.id === account.lapak?.id);
+      if (existing) {
+        existing.amount_idr = body.amount_idr;
+        existing.message = body.message ?? null;
+        return { status: 200, body: envelope(existing) };
+      }
+      const offer: MockOffer = {
+        id: nextId('o'),
+        bid_id: bid.id,
+        lapak: lapakSummary(account.lapak),
+        amount_idr: body.amount_idr,
+        message: body.message ?? null,
+        status: 'pending',
+        created_at: new Date().toISOString(),
+      };
+      OFFERS.push(offer);
+      bid.offer_count = OFFERS.filter((o) => o.bid_id === bid.id).length;
+      return { status: 201, body: envelope(offer) };
+    },
+  },
+  {
+    method: 'post',
+    path: /^\/market\/v1\/bids\/[^/]+\/offers\/[^/]+\/award$/,
+    reply: (config) => {
+      const account = caller(config);
+      const bid = BIDS.find((b) => b.id === segment(config, 3));
+      const offer = OFFERS.find((o) => o.id === segment(config, 1));
+      if (!account) return { status: 401, body: unauthorized() };
+      if (!bid || !offer || offer.bid_id !== bid.id) return { status: 404, body: notFound() };
+      if (bid.customer.id !== account.user.id) {
+        return { status: 403, body: errorBody('detail', 'Bukan bid Anda.') };
+      }
+      if (bid.status !== 'open') {
+        return { status: 409, body: errorBody('detail', 'Bid sudah tidak terbuka.') };
+      }
+
+      const wallet = WALLETS[account.login];
+      const fee = CONFIG_ROW.bid_manual_fee_idr;
+      if (wallet.balance_idr < fee) {
+        return {
+          status: 402,
+          body: errorBody('detail', 'Saldo tidak mencukupi untuk biaya platform.'),
+        };
+      }
+      wallet.balance_idr -= fee;
+      LEDGERS[account.login].unshift({
+        id: nextId('3'),
+        type: 'platform_fee',
+        amount_idr: -fee,
+        balance_after_idr: wallet.balance_idr,
+        order_id: null,
+        bid_id: bid.id,
+        note: 'Biaya platform (bid manual)',
+        created_at: new Date().toISOString(),
+      });
+
+      offer.status = 'awarded';
+      OFFERS.filter((o) => o.bid_id === bid.id && o.id !== offer.id).forEach((o) => {
+        o.status = 'rejected';
+      });
+      // The order is priced from the AWARDED OFFER, not the posted budget.
+      const order = createBidOrder(bid, offer.lapak, offer.amount_idr, 'bid_manual');
+      bid.status = 'ordered';
+      bid.accepted_offer_id = offer.id;
+      bid.order_id = order.id;
+      bid.fee_paid_idr = fee;
+      bid.off_platform_risk = false;
+      return { status: 200, body: envelope(bidView(bid)) };
     },
   },
 
