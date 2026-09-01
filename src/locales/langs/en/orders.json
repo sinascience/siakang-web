@@ -53,6 +53,13 @@
     "paid": "Paid",
     "outstanding": "Outstanding"
   },
+  "addTier": {
+    "title": "Add a Tier to This Order",
+    "subtitle": "Another tier of the same service",
+    "hint": "Pick the tier you agreed on with the lapak in chat. It is added to this order, and you pay the difference.",
+    "noTiers": "No other tiers left to add.",
+    "success": "Tier added to the order."
+  },
   "payments": {
     "title": "Payment History",
     "empty": "No payments recorded for this order yet."
@@ -74,12 +81,19 @@
     "confirmCountdownLabel": "Waiting on customer confirmation",
     "confirmDeadlinePassed": "Deadline passed — waiting on auto-confirmation",
     "payAction": "Pay {{amount}}",
-    "paySuccess": "Payment successful."
+    "paySuccess": "Payment successful.",
+    "openChat": "Open Chat",
+    "addTierAction": "Add Tier",
+    "confirmAction": "Confirm Completion",
+    "confirmSuccess": "Order confirmed as completed.",
+    "confirmAlreadyAuto": "The deadline had already elapsed — this order was auto-confirmed."
   },
   "errors": {
     "loadData": "Failed to load orders.",
     "loadDetail": "Failed to load order detail.",
     "createFailed": "Failed to create order.",
-    "payFailed": "Failed to process payment."
+    "payFailed": "Failed to process payment.",
+    "addItemFailed": "Failed to add the tier to this order.",
+    "confirmFailed": "Failed to confirm the order."
   }
 }

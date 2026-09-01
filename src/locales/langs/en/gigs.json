@@ -1,0 +1,29 @@
+{
+  "title": "Services",
+  "subtitle": "Browse services offered by lapak — start with the cheapest tier and upgrade once they have taken a look.",
+  "list": {
+    "emptyTitle": "No services yet",
+    "emptySubtitle": "Services offered by lapak will show up here."
+  },
+  "card": {
+    "startingFrom": "From {{amount}}"
+  },
+  "detail": {
+    "title": "Service Detail",
+    "backToList": "Back to services",
+    "notFoundTitle": "Service not found",
+    "notFoundSubtitle": "This service is no longer available or the link is invalid.",
+    "tiersTitle": "Tiers",
+    "tiersHint": "Start with the consultation. If the lapak suggests a bigger tier in chat, you can add it to the same order.",
+    "checkout": "Order & Pay {{amount}}",
+    "retryPay": "Retry Payment",
+    "paySuccess": "Payment successful.",
+    "orderPendingHint": "Your order is saved and can be paid at any time.",
+    "viewOrder": "View order"
+  },
+  "errors": {
+    "loadData": "Failed to load services.",
+    "loadDetail": "Failed to load service detail.",
+    "gigNotFoundForOrder": "Could not find the service behind this order."
+  }
+}

@@ -53,6 +53,13 @@
     "paid": "Sudah Dibayar",
     "outstanding": "Sisa Tagihan"
   },
+  "addTier": {
+    "title": "Tambah Paket ke Pesanan",
+    "subtitle": "Paket lain dari jasa yang sama",
+    "hint": "Pilih paket yang sudah Anda sepakati dengan lapak lewat chat. Paket ditambahkan ke pesanan ini, lalu bayar sisanya.",
+    "noTiers": "Tidak ada paket lain yang bisa ditambahkan.",
+    "success": "Paket ditambahkan ke pesanan."
+  },
   "payments": {
     "title": "Riwayat Pembayaran",
     "empty": "Belum ada pembayaran untuk pesanan ini."
@@ -74,12 +81,19 @@
     "confirmCountdownLabel": "Menunggu konfirmasi pelanggan",
     "confirmDeadlinePassed": "Batas waktu terlewati — menunggu konfirmasi otomatis",
     "payAction": "Bayar {{amount}}",
-    "paySuccess": "Pembayaran berhasil."
+    "paySuccess": "Pembayaran berhasil.",
+    "openChat": "Buka Chat",
+    "addTierAction": "Tambah Paket",
+    "confirmAction": "Konfirmasi Selesai",
+    "confirmSuccess": "Pesanan dikonfirmasi selesai.",
+    "confirmAlreadyAuto": "Batas waktu sudah terlewati — pesanan dikonfirmasi otomatis."
   },
   "errors": {
     "loadData": "Gagal memuat pesanan.",
     "loadDetail": "Gagal memuat detail pesanan.",
     "createFailed": "Gagal membuat pesanan.",
-    "payFailed": "Gagal memproses pembayaran."
+    "payFailed": "Gagal memproses pembayaran.",
+    "addItemFailed": "Gagal menambahkan paket ke pesanan.",
+    "confirmFailed": "Gagal mengonfirmasi pesanan."
   }
 }

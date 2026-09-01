@@ -1,5 +1,13 @@
 import type { ApiEnvelope } from 'src/module/core/features/auth/types';
-import type { Order, ListMeta, PayResult, OrderCounts, OrderListParams, CreateOrderParams } from '../types';
+import type {
+  Order,
+  ListMeta,
+  PayResult,
+  OrderCounts,
+  OrderListParams,
+  CreateOrderParams,
+  AddOrderItemParams,
+} from '../types';
 
 import axios, { endpoints, flattenFieldErrors } from 'src/shared/lib/axios';
 
@@ -76,4 +84,30 @@ export function createOrder(params: CreateOrderParams): Promise<Order> {
  */
 export function payOrder(id: string): Promise<PayResult> {
   return unwrap<PayResult>(axios.post(endpoints.market.orders.pay(id)));
+}
+
+/**
+ * `POST /orders/{id}/items` — the flow-B upsell. Appends ONE unpaid item for
+ * another tier of the same gig to the EXISTING order (no new order id), which
+ * raises `total_idr` / `outstanding_idr` so the existing Pay action becomes
+ * payable again and produces a SECOND payment row against the same order.
+ *
+ * There is no proposal entity: the lapak upsells in the order's chat thread,
+ * and the customer agreeing IS this call.
+ */
+export function addOrderItem(id: string, params: AddOrderItemParams): Promise<Order> {
+  return unwrap<Order>(axios.post(endpoints.market.orders.items(id), params));
+}
+
+/**
+ * `POST /orders/{id}/confirm` — customer confirms the work is done; moves the
+ * order to `completed` and credits the lapak.
+ *
+ * IDEMPOTENT by contract: if the auto-confirm window elapsed first the order is
+ * already `completed`, and this returns it unchanged rather than paying twice.
+ * A `completed` order coming back is SUCCESS, never an error — callers read
+ * `auto_confirmed` to label which of the two actually happened.
+ */
+export function confirmOrder(id: string): Promise<Order> {
+  return unwrap<Order>(axios.post(endpoints.market.orders.confirm(id)));
 }

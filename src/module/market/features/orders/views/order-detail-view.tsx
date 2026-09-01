@@ -1,6 +1,8 @@
 import type { Order } from '../types';
 import type { LabelColor } from 'src/shared/ui/label';
 
+import { useState } from 'react';
+
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -17,6 +19,7 @@ import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
 import { useTranslate } from 'src/locales';
 import { Label } from 'src/shared/ui/label';
@@ -31,8 +34,10 @@ import { useTable, TableHeadCustom } from 'src/shared/ui/table';
 
 import { useOrder } from '../hooks/use-order';
 import { usePayOrder } from '../hooks/use-pay-order';
+import { useConfirmOrder } from '../hooks/use-confirm-order';
 import { OrderStatusLabel } from '../components/order-status-label';
 import { useConfirmCountdown } from '../hooks/use-confirm-countdown';
+import { OrderAddTierDialog } from '../components/order-add-tier-dialog';
 import { formatIdr, formatOrderCode, formatCountdownClock } from '../utils/format';
 
 // ----------------------------------------------------------------------
@@ -47,6 +52,16 @@ export function OrderDetailView() {
   // to pay, or from the orders list `pending_payment` tab — the return path
   // for any unpaid order is this one Pay action, retried against the same id.
   const { pay, loading: paying, error: payError, clearError: clearPayError } = usePayOrder();
+  const {
+    confirm,
+    loading: confirming,
+    error: confirmError,
+    clearError: clearConfirmError,
+  } = useConfirmOrder();
+
+  // Flow-B upsell picker. Local state, not a URL param — opening it must not
+  // re-render the whole detail page (docs/patterns/dialog-crud.md).
+  const [addTierOpen, setAddTierOpen] = useState(false);
 
   const backHref = paths.dashboard.market.orders;
 
@@ -55,6 +70,20 @@ export function OrderDetailView() {
     const result = await pay(order.id);
     if (result) {
       toast.success(t('detail.paySuccess'));
+      refresh();
+    }
+  };
+
+  const handleConfirm = async () => {
+    if (!order) return;
+    const updated = await confirm(order.id);
+    if (updated) {
+      // `confirm` is idempotent: if the auto-confirm window elapsed first the
+      // order comes back already `completed`. Both are success — `auto_confirmed`
+      // says which actually happened, and the toast says so honestly.
+      toast.success(
+        updated.auto_confirmed ? t('detail.confirmAlreadyAuto') : t('detail.confirmSuccess')
+      );
       refresh();
     }
   };
@@ -101,6 +130,9 @@ export function OrderDetailView() {
   // Whenever there is money left owing — not just `pending_payment` — this is
   // the one return path for an unpaid order, however the customer got here.
   const canPay = order.outstanding_idr > 0;
+  // The upsell: another tier of the same gig, appended to THIS order. Allowed
+  // while the order is `paid` and not yet completed, per the contract.
+  const canAddTier = order.source === 'gig' && order.status === 'paid';
 
   return (
     <DashboardContent maxWidth="lg">
@@ -111,8 +143,36 @@ export function OrderDetailView() {
         titleVariant="h5"
         subtitle={t(`sources.${order.source}`)}
         action={
-          <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
+          /* flexWrap: this row now carries up to four controls (status, chat,
+             add-tier, pay) and must not overflow on a narrow screen. */
+          <Stack
+            direction="row"
+            spacing={1.5}
+            sx={{ alignItems: 'center', flexWrap: 'wrap', rowGap: 1.5 }}
+          >
             <OrderStatusLabel status={order.status} variant="filled" />
+            {/* Chat is where a gig gets negotiated — including the upsell the
+                customer then adds. Built by FE-D; only linked to from here. */}
+            {order.chat_thread_id && (
+              <Button
+                variant="outlined"
+                color="inherit"
+                component={RouterLink}
+                href={paths.dashboard.market.chatThread(order.chat_thread_id)}
+                startIcon={<Iconify icon="solar:chat-round-dots-bold" width={18} />}
+              >
+                {t('detail.openChat')}
+              </Button>
+            )}
+            {canAddTier && (
+              <Button
+                variant="outlined"
+                startIcon={<Iconify icon="mingcute:add-line" width={18} />}
+                onClick={() => setAddTierOpen(true)}
+              >
+                {t('detail.addTierAction')}
+              </Button>
+            )}
             {canPay && (
               <Button
                 variant="contained"
@@ -138,14 +198,33 @@ export function OrderDetailView() {
         <OrderItemsCard order={order} />
 
         <Stack spacing={3}>
-          {showCountdown && <OrderConfirmCountdownCard order={order} />}
+          {showCountdown && (
+            <OrderConfirmCountdownCard
+              order={order}
+              confirming={confirming}
+              onConfirm={handleConfirm}
+            />
+          )}
           <OrderSummaryCard order={order} />
           <OrderPartiesCard order={order} />
           <OrderPaymentsCard order={order} />
         </Stack>
       </Box>
 
+      <OrderAddTierDialog
+        open={addTierOpen}
+        order={order}
+        onClose={() => setAddTierOpen(false)}
+        onAdded={() => {
+          setAddTierOpen(false);
+          // The new item raises `outstanding_idr`, so the Pay action above turns
+          // payable again — and that second charge is the second payment row.
+          refresh();
+        }}
+      />
+
       <ErrorDialog open={!!payError} message={payError ?? ''} onClose={clearPayError} />
+      <ErrorDialog open={!!confirmError} message={confirmError ?? ''} onClose={clearConfirmError} />
     </DashboardContent>
   );
 }
@@ -371,7 +450,15 @@ function OrderPaymentsCard({ order }: { order: Order }) {
 
 // ----------------------------------------------------------------------
 
-function OrderConfirmCountdownCard({ order }: { order: Order }) {
+function OrderConfirmCountdownCard({
+  order,
+  confirming,
+  onConfirm,
+}: {
+  order: Order;
+  confirming: boolean;
+  onConfirm: () => void;
+}) {
   const { t } = useTranslate('orders');
   const { remainingMs, expired } = useConfirmCountdown(
     order.confirm_deadline_at,
@@ -400,6 +487,20 @@ function OrderConfirmCountdownCard({ order }: { order: Order }) {
           {formatCountdownClock(remainingMs)}
         </Typography>
       )}
+
+      {/* Still offered after the deadline: `confirm` is idempotent, so a click
+          that races the sweeper returns the already-completed order rather than
+          failing or crediting the lapak twice. */}
+      <Button
+        fullWidth
+        variant="contained"
+        loading={confirming}
+        startIcon={<Iconify icon="solar:check-circle-bold" width={18} />}
+        onClick={onConfirm}
+        sx={{ mt: 2 }}
+      >
+        {t('detail.confirmAction')}
+      </Button>
     </Card>
   );
 }

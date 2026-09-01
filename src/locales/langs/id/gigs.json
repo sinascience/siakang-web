@@ -1,0 +1,29 @@
+{
+  "title": "Jasa",
+  "subtitle": "Cari jasa dari lapak — mulai dari paket termurah, tingkatkan setelah lapak memeriksa.",
+  "list": {
+    "emptyTitle": "Belum ada jasa",
+    "emptySubtitle": "Jasa yang ditawarkan lapak akan muncul di sini."
+  },
+  "card": {
+    "startingFrom": "Mulai {{amount}}"
+  },
+  "detail": {
+    "title": "Detail Jasa",
+    "backToList": "Kembali ke daftar jasa",
+    "notFoundTitle": "Jasa tidak ditemukan",
+    "notFoundSubtitle": "Jasa sudah tidak tersedia atau tautannya tidak valid.",
+    "tiersTitle": "Pilihan Paket",
+    "tiersHint": "Mulai dari konsultasi. Kalau lapak menyarankan paket lebih besar lewat chat, Anda bisa menambahkannya ke pesanan yang sama.",
+    "checkout": "Pesan & Bayar {{amount}}",
+    "retryPay": "Coba Bayar Lagi",
+    "paySuccess": "Pembayaran berhasil.",
+    "orderPendingHint": "Pesanan Anda sudah tersimpan dan bisa dibayar kapan saja.",
+    "viewOrder": "Lihat pesanan"
+  },
+  "errors": {
+    "loadData": "Gagal memuat jasa.",
+    "loadDetail": "Gagal memuat detail jasa.",
+    "gigNotFoundForOrder": "Jasa untuk pesanan ini tidak ditemukan."
+  }
+}

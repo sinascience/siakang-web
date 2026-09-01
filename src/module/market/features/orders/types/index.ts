@@ -129,6 +129,11 @@ export type CreateOrderParams = {
   quantity?: number;
 };
 
+/** `POST /orders/{id}/items` body — the flow-B upsell. Same field name as order creation. */
+export type AddOrderItemParams = {
+  gig_tier_id: string;
+};
+
 /** `PayResult` from the contract. `wallet_balance_idr` is the balance AFTER the charge. */
 export type PayResult = {
   order: Order;
