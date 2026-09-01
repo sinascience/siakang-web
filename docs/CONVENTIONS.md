@@ -23,6 +23,27 @@
 > Anything a doc describes that has no real example here still has to be built to
 > the described pattern. Delete this banner once the referenced features exist.
 
+> **⚠️ `yarn fm:check` / `fm:fix` / `fix:all` are unusable on a Windows checkout.**
+>
+> `prettier.config.mjs` sets `endOfLine: 'lf'`, and git here runs with
+> `core.autocrlf=true`, so every checked-out file has CRLF endings and Prettier
+> reports **all 449 source files** as unformatted. Nothing is actually
+> mis-styled — it is line endings, and only line endings.
+>
+> Consequences, until this is fixed:
+> - **Never run `yarn fm:fix` or `yarn fix:all` repo-wide.** It rewrites every
+>   file in the tree, which buries your own diff and collides with every other
+>   open branch. One minor already had to `git restore` its way out of this.
+> - **`yarn lint` is the enforced gate**, and it passes. Formatting is not
+>   separately gated.
+> - If you want Prettier on your own files, scope it:
+>   `npx prettier --write src/module/market/features/<your-feature>`
+>
+> The real fix is a `.gitattributes` with `* text=auto eol=lf`, which makes the
+> working tree match the config. It is **deliberately deferred to sprint
+> integration**: renormalising every file mid-sprint would conflict with every
+> in-flight task branch, and the cost of waiting is one banner.
+
 Ringkasan aturan main. Detail per topik di [patterns/](patterns/).
 
 ## Stack & Tools
