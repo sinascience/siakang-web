@@ -25,6 +25,12 @@ export const paths = {
     },
     market: {
       wallet: '/market/wallet',
+      catalog: '/market/catalog',
+      product: (id: string) => `/market/catalog/${id}`,
+      orders: '/market/orders',
+      order: (id: string) => `/market/orders/${id}`,
+      chat: '/market/chat',
+      chatThread: (id: string) => `/market/chat/${id}`,
     },
     demo: {
       item: '/demo/item',
