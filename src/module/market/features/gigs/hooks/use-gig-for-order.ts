@@ -4,22 +4,20 @@ import type { Order } from 'src/module/market/features/orders/types';
 import i18n from 'i18next';
 import { useState, useEffect } from 'react';
 
-import { listGigs } from '../api';
+import { getGig } from '../api';
 
 // ----------------------------------------------------------------------
 // Which gig does this order belong to?
 //
-// The frozen contract gives `OrderItem.gig_tier_id` but no `gig_id`, and there
-// is no `GET /gig-tiers/{id}` — so the only way from an order back to its gig
-// is to look for the gig that owns one of its tiers.
+// Contract v1.0.3 put `gig_id` on `OrderItem` — non-null exactly when
+// `gig_tier_id` is — so this is one `GET /gigs/{id}`.
 //
-// ponytail: scans the first page of `GET /gigs` (limit 100) client-side. Fine
-// while the seeded catalogue is tiny; the upgrade path is BE adding `gig_id` to
-// `OrderItem` (or a tier lookup endpoint), after which this hook is one GET.
-// Flagged to fe-master.
+// It previously scanned the first page of `GET /gigs` and matched by tier id,
+// because nothing in the contract led from an order back to its gig. That held
+// only while the catalogue was small: past the first hundred gigs it returned
+// nothing, silently, and the upsell dialog came up empty. The amendment removed
+// the need for it entirely.
 // ----------------------------------------------------------------------
-
-const LOOKUP_LIMIT = 100;
 
 type State = {
   data: Gig | null;
@@ -31,27 +29,18 @@ type State = {
 export function useGigForOrder(order: Order | null, enabled: boolean): State {
   const [state, setState] = useState<State>({ data: null, loading: false, error: null });
 
-  const tierKey = (order?.items ?? [])
-    .map((item) => item.gig_tier_id)
-    .filter(Boolean)
-    .join(',');
+  const gigId = (order?.items ?? []).find((item) => item.gig_id)?.gig_id ?? null;
 
   useEffect(() => {
-    if (!enabled || !tierKey) return undefined;
+    if (!enabled || !gigId) return undefined;
 
     let cancelled = false;
-    const tierIds = tierKey.split(',');
-
     setState({ data: null, loading: true, error: null });
-    listGigs({ limit: LOOKUP_LIMIT })
-      .then((result) => {
+
+    getGig(gigId)
+      .then((gig) => {
         if (cancelled) return;
-        const gig = result.data.find((row) => row.tiers.some((tier) => tierIds.includes(tier.id)));
-        setState({
-          data: gig ?? null,
-          loading: false,
-          error: gig ? null : i18n.t('gigs:errors.gigNotFoundForOrder'),
-        });
+        setState({ data: gig, loading: false, error: null });
       })
       .catch((err: unknown) => {
         if (cancelled) return;
@@ -65,7 +54,7 @@ export function useGigForOrder(order: Order | null, enabled: boolean): State {
     return () => {
       cancelled = true;
     };
-  }, [enabled, tierKey]);
+  }, [enabled, gigId]);
 
   return state;
 }

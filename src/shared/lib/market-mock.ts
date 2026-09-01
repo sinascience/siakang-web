@@ -155,6 +155,7 @@ type MockOrderItem = {
   id: string;
   product_id: string | null;
   gig_tier_id: string | null;
+  gig_id: string | null;
   name: string;
   unit_price_idr: number;
   quantity: number;
@@ -407,6 +408,7 @@ const ROUTES: Route[] = [
             id: nextId('8'),
             product_id: product?.id ?? null,
             gig_tier_id: tier?.id ?? null,
+            gig_id: gig?.id ?? null,
             name: product ? product.title : `${gig!.title} — ${tier!.name}`,
             unit_price_idr: unitPrice,
             quantity,
@@ -530,6 +532,7 @@ const ROUTES: Route[] = [
         id: nextId('8'),
         product_id: null,
         gig_tier_id: tier.id,
+        gig_id: gig?.id ?? null,
         name: `${gig?.title ?? ''} — ${tier.name}`.trim(),
         unit_price_idr: tier.price_idr,
         quantity: 1,

@@ -49,6 +49,8 @@ export type OrderItem = {
   id: string;
   product_id: string | null;
   gig_tier_id: string | null;
+  /** Contract v1.0.3 — non-null exactly when `gig_tier_id` is. */
+  gig_id: string | null;
   /** Snapshotted at order time — not a live product/gig-tier lookup. */
   name: string;
   /** Whole rupiah, NOT cents. */
