@@ -60,10 +60,126 @@ const lapakSummary = (lapak: typeof LAPAK_JOKO): LapakSummary => ({
   rating: lapak.rating,
 });
 
-const WALLET = {
-  user_id: CUSTOMER.id,
-  balance_idr: 5000000,
+// ---------------------------------------------------------------- accounts
+//
+// `/core/v1/auth/*` is mocked too, so a minor signs in through the real
+// sign-in page and the persona follows from the account — no URL flag, no
+// faked auth context, no temporary edit to a hot file to wire one in. This is
+// the single supported way to be a persona under mocks.
+//
+// Mirrors the contract's `x-seed-data`. Password for every account, as seeded:
+// `siakang123`.
+
+type SeededAccount = {
+  login: string;
+  user: { id: string; email: string; username: string; full_name: string };
+  roles: string[];
+  /** The lapak profile `GET /market/v1/me` returns; null for a customer. */
+  lapak: typeof LAPAK_JOKO | null;
+  balance_idr: number;
 };
+
+const SEEDED_ACCOUNTS: SeededAccount[] = [
+  {
+    login: 'budi@siakang.test',
+    user: {
+      id: '20000000-0000-4000-8000-000000000000',
+      email: 'budi@siakang.test',
+      username: 'budi',
+      full_name: 'Budi Santoso',
+    },
+    roles: ['customer'],
+    lapak: null,
+    balance_idr: 5000000,
+  },
+  {
+    login: 'siti@siakang.test',
+    user: {
+      id: '20000000-0000-4000-8000-000000000001',
+      email: 'siti@siakang.test',
+      username: 'siti',
+      full_name: 'Siti Rahayu',
+    },
+    roles: ['customer'],
+    lapak: null,
+    // Contract v1.0.4: under every catalogue price, so purchases refuse — but
+    // she can pay the 2 500 / 10 000 platform fees, which is the point of her.
+    balance_idr: 100000,
+  },
+  {
+    login: 'joko@siakang.test',
+    user: {
+      id: LAPAK_JOKO.user_id,
+      email: 'joko@siakang.test',
+      username: 'joko',
+      full_name: 'Joko Susilo',
+    },
+    roles: ['lapak'],
+    lapak: LAPAK_JOKO,
+    balance_idr: 0,
+  },
+  {
+    login: 'sari@siakang.test',
+    user: {
+      id: LAPAK_SARI.user_id,
+      email: 'sari@siakang.test',
+      username: 'sari',
+      full_name: 'Sari Wulandari',
+    },
+    roles: ['lapak'],
+    lapak: LAPAK_SARI,
+    balance_idr: 0,
+  },
+];
+
+const SEEDED_PASSWORD = 'siakang123';
+
+function base64url(value: string): string {
+  return btoa(value).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+/**
+ * A structurally real JWT — unsigned, but the FE never verifies the signature.
+ * It must decode, because `isAccessTokenExpired` reads `exp` via `jwtDecode`,
+ * and it carries the login so the session survives a page reload: the token in
+ * sessionStorage is the only thing left after one.
+ */
+function makeToken(login: string, ttlSeconds: number): string {
+  const header = base64url(JSON.stringify({ alg: 'none', typ: 'JWT' }));
+  const payload = base64url(
+    JSON.stringify({ sub: login, email: login, exp: Math.floor(Date.now() / 1000) + ttlSeconds })
+  );
+  return `${header}.${payload}.mock`;
+}
+
+function accountFromToken(token: string | undefined): SeededAccount | undefined {
+  if (!token) return undefined;
+  try {
+    const payload = JSON.parse(
+      atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))
+    ) as { sub?: string };
+    return SEEDED_ACCOUNTS.find((a) => a.login === payload.sub);
+  } catch {
+    return undefined;
+  }
+}
+
+/** Who is calling, from the Authorization header the axios interceptor attached. */
+function caller(config: InternalAxiosRequestConfig): SeededAccount | undefined {
+  const raw = config.headers?.Authorization ?? config.headers?.authorization;
+  const header = typeof raw === 'string' ? raw : undefined;
+  return accountFromToken(header?.replace(/^Bearer\s+/i, ''));
+}
+
+/** One wallet per seeded account, so Siti's small balance is actually hers. */
+const WALLETS: Record<string, { user_id: string; balance_idr: number }> = Object.fromEntries(
+  SEEDED_ACCOUNTS.map((a) => [a.login, { user_id: a.user.id, balance_idr: a.balance_idr }])
+);
+
+function walletOf(config: InternalAxiosRequestConfig) {
+  const account = caller(config);
+  return account ? WALLETS[account.login] : undefined;
+}
 
 type LedgerRow = {
   id: string;
@@ -77,18 +193,31 @@ type LedgerRow = {
 };
 
 // Signed amounts, newest first — matches the contract's LedgerEntry.
-const LEDGER: LedgerRow[] = [
-  {
-    id: '31111111-1111-4111-8111-111111111111',
-    type: 'topup',
-    amount_idr: 5000000,
-    balance_after_idr: 5000000,
-    order_id: null,
-    bid_id: null,
-    note: 'Saldo awal (seed)',
-    created_at: '2026-09-01T02:00:00Z',
-  },
-];
+// One ledger per account; a seeded opening balance only where there is one.
+const LEDGERS: Record<string, LedgerRow[]> = Object.fromEntries(
+  SEEDED_ACCOUNTS.map((a) => [
+    a.login,
+    a.balance_idr > 0
+      ? [
+          {
+            id: `3${a.user.id.slice(-11)}`,
+            type: 'topup',
+            amount_idr: a.balance_idr,
+            balance_after_idr: a.balance_idr,
+            order_id: null,
+            bid_id: null,
+            note: 'Saldo awal (seed)',
+            created_at: '2026-09-01T02:00:00Z',
+          },
+        ]
+      : [],
+  ])
+);
+
+function ledgerOf(config: InternalAxiosRequestConfig): LedgerRow[] {
+  const account = caller(config);
+  return account ? LEDGERS[account.login] : [];
+}
 
 const CONFIG_ROW = {
   bid_auto_fee_idr: 2500,
@@ -243,6 +372,10 @@ function errorBody(field: string, message: string) {
   return { data: null, message, meta: null, errors: { [field]: [message] } };
 }
 
+function unauthorized() {
+  return errorBody('detail', 'Token tidak valid atau sudah kedaluwarsa.');
+}
+
 function notFound() {
   return errorBody('detail', 'Data tidak ditemukan.');
 }
@@ -278,11 +411,28 @@ function segment(config: InternalAxiosRequestConfig, fromEnd: number): string {
 }
 
 /**
- * Signed-in persona. `?lapak` on the app URL flips the mock to the lapak side,
- * so both halves of a two-persona flow can be driven without a real backend.
+ * `MeResponse`. `company` and `client` are absent, not null — marketplace
+ * personas have no company by design, and the real API omits the keys, so the
+ * mock must omit them too or FE stops exercising the null-tolerant path.
  */
-function isLapakSession(): boolean {
-  return typeof window !== 'undefined' && window.location.search.includes('lapak');
+function meFor(account: SeededAccount) {
+  return {
+    user: account.user,
+    roles: account.roles,
+    permissions: [] as string[],
+    is_super_admin: false,
+  };
+}
+
+/** `SignInResult` — a token pair plus the same `me` payload. */
+function sessionFor(account: SeededAccount) {
+  return {
+    access_token: makeToken(account.login, 60 * 60),
+    refresh_token: makeToken(account.login, 60 * 60 * 24 * 7),
+    token_type: 'Bearer',
+    expires_in: 3600,
+    ...meFor(account),
+  };
 }
 
 // ---------------------------------------------------------------- routes
@@ -294,14 +444,57 @@ type Route = {
 };
 
 const ROUTES: Route[] = [
+  // ---- core auth, so the real sign-in page works under mocks ----
+  //
+  // This is what removes the need for a faked auth context: `AuthGuard` cannot
+  // be satisfied while `/core/v1/auth/*` reaches a backend that is not running,
+  // and three minors each invented a different way around it. Now they sign in.
+  {
+    method: 'post',
+    path: /^\/core\/v1\/auth\/signin$/,
+    reply: (config) => {
+      const body = bodyOf<{ login?: string; password?: string }>(config);
+      const account = SEEDED_ACCOUNTS.find((a) => a.login === body.login);
+      if (!account || body.password !== SEEDED_PASSWORD) {
+        return { status: 401, body: errorBody('detail', 'Email atau kata sandi salah.') };
+      }
+      return { status: 200, body: envelope(sessionFor(account)) };
+    },
+  },
+  {
+    method: 'post',
+    path: /^\/core\/v1\/auth\/refresh$/,
+    reply: (config) => {
+      const body = bodyOf<{ refresh_token?: string }>(config);
+      const account = accountFromToken(body.refresh_token);
+      if (!account) return { status: 401, body: unauthorized() };
+      return { status: 200, body: envelope(sessionFor(account)) };
+    },
+  },
+  {
+    method: 'get',
+    path: /^\/core\/v1\/auth\/me$/,
+    reply: (config) => {
+      const account = caller(config);
+      if (!account) return { status: 401, body: unauthorized() };
+      return { status: 200, body: envelope(meFor(account)) };
+    },
+  },
+  {
+    method: 'post',
+    path: /^\/core\/v1\/auth\/logout(-all)?$/,
+    reply: () => ({ status: 200, body: envelope({ message: 'ok' }) }),
+  },
+
   // ---- phase 1: identity, config, wallet ----
   {
     method: 'get',
     path: /^\/market\/v1\/me$/,
-    reply: () => ({
-      status: 200,
-      body: envelope({ lapak: isLapakSession() ? LAPAK_JOKO : null }),
-    }),
+    reply: (config) => {
+      const account = caller(config);
+      if (!account) return { status: 401, body: unauthorized() };
+      return { status: 200, body: envelope({ lapak: account.lapak }) };
+    },
   },
   {
     method: 'get',
@@ -311,13 +504,17 @@ const ROUTES: Route[] = [
   {
     method: 'get',
     path: /^\/market\/v1\/wallet$/,
-    reply: () => ({ status: 200, body: envelope(WALLET) }),
+    reply: (config) => {
+      const wallet = walletOf(config);
+      if (!wallet) return { status: 401, body: unauthorized() };
+      return { status: 200, body: envelope(wallet) };
+    },
   },
   {
     method: 'get',
     path: /^\/market\/v1\/wallet\/ledger$/,
     reply: (config) => {
-      const { rows, pagination } = paginate(LEDGER, config);
+      const { rows, pagination } = paginate(ledgerOf(config), config);
       return { status: 200, body: envelope(rows, { pagination }) };
     },
   },
@@ -454,7 +651,9 @@ const ROUTES: Route[] = [
       // 402 is the contract's insufficient-balance code. Exercised whenever the
       // fixture wallet cannot cover the charge, so FE handles the real branch
       // rather than only the happy path.
-      if (order.outstanding_idr > WALLET.balance_idr) {
+      const wallet = walletOf(config);
+      if (!wallet) return { status: 401, body: unauthorized() };
+      if (order.outstanding_idr > wallet.balance_idr) {
         return { status: 402, body: errorBody('detail', 'Saldo tidak mencukupi.') };
       }
 
@@ -492,12 +691,12 @@ const ROUTES: Route[] = [
         order.chat_thread_id = thread.id;
       }
 
-      WALLET.balance_idr -= amount;
-      LEDGER.unshift({
+      wallet.balance_idr -= amount;
+      ledgerOf(config).unshift({
         id: nextId('3'),
         type: 'order_payment',
         amount_idr: -amount,
-        balance_after_idr: WALLET.balance_idr,
+        balance_after_idr: wallet.balance_idr,
         order_id: order.id,
         bid_id: null,
         note: `Pembayaran ${order.items[0]?.name ?? 'pesanan'}`,
@@ -506,7 +705,7 @@ const ROUTES: Route[] = [
 
       return {
         status: 200,
-        body: envelope({ order, payment, wallet_balance_idr: WALLET.balance_idr }),
+        body: envelope({ order, payment, wallet_balance_idr: wallet.balance_idr }),
       };
     },
   },
@@ -630,7 +829,7 @@ const ROUTES: Route[] = [
       const message: MockMessage = {
         id: nextId('7'),
         thread_id: threadId,
-        sender_user_id: isLapakSession() ? LAPAK_JOKO.user_id : CUSTOMER.id,
+        sender_user_id: caller(config)?.user.id ?? CUSTOMER.id,
         body: body.body,
         created_at: new Date().toISOString(),
       };

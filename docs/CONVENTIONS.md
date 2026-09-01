@@ -39,6 +39,12 @@
 > - If you want Prettier on your own files, scope it:
 >   `npx prettier --write src/module/market/features/<your-feature>`
 >
+> **Seeing your work in a browser:** `AuthGuard` needs a session, so with
+> `VITE_USE_MOCKS=true` the mock also serves `/core/v1/auth/*` — you sign in
+> through the real sign-in page as a seeded account (`siakang123`). That is the
+> **one supported mechanism**; see [patterns/mock-auth.md](patterns/mock-auth.md).
+> Do not fake the auth context or patch a hot file to get past the guard.
+
 > The real fix is a `.gitattributes` with `* text=auto eol=lf`, which makes the
 > working tree match the config. It is **deliberately deferred to sprint
 > integration**: renormalising every file mid-sprint would conflict with every
