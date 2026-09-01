@@ -154,10 +154,14 @@ export function OrderDetailView() {
     order.status === 'awaiting_confirmation' && !!order.confirm_deadline_at && !isLapak;
   // Whenever there is money left owing — not just `pending_payment` — this is
   // the one return path for an unpaid order, however the customer got here.
-  const canPay = order.outstanding_idr > 0;
+  // Customer-only, like Confirm. The server gates `/pay` to the customer
+  // anyway, so a lapak clicking this only ever got a rejection — but offering
+  // an action that cannot succeed is its own defect. Flagged by fe-task-i,
+  // which correctly left it alone to keep its own diff minimal.
+  const canPay = !isLapak && order.outstanding_idr > 0;
   // The upsell: another tier of the same gig, appended to THIS order. Allowed
   // while the order is `paid` and not yet completed, per the contract.
-  const canAddTier = order.source === 'gig' && order.status === 'paid';
+  const canAddTier = !isLapak && order.source === 'gig' && order.status === 'paid';
   // Lapak-only: marks the work done and starts the customer's confirm
   // countdown. Stays visible (never hidden) even when a pending upsell item
   // will block it with a 409 — the lapak needs to see why, not guess.
