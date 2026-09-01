@@ -115,6 +115,42 @@ const PRODUCTS = [
   },
 ];
 
+const GIGS = [
+  {
+    id: '42111111-1111-4111-8111-111111111111',
+    title: 'Servis kulkas & freezer',
+    description: 'Diagnosa dan perbaikan kulkas atau freezer rumah tangga.',
+    image_url: null,
+    lapak: lapakSummary(LAPAK_JOKO),
+    // Ordered by price ascending, per the contract. goal.md's worked example.
+    tiers: [
+      {
+        id: '43111111-1111-4111-8111-111111111111',
+        gig_id: '42111111-1111-4111-8111-111111111111',
+        name: 'Konsultasi',
+        description: 'Diagnosa awal lewat chat.',
+        price_idr: 10000,
+      },
+      {
+        id: '43111111-1111-4111-8111-222222222222',
+        gig_id: '42111111-1111-4111-8111-111111111111',
+        name: 'Perbaikan ringan',
+        description: 'Penggantian komponen kecil.',
+        price_idr: 20000,
+      },
+      {
+        id: '43111111-1111-4111-8111-333333333333',
+        gig_id: '42111111-1111-4111-8111-111111111111',
+        name: 'Perbaikan besar',
+        description: 'Perbaikan kompresor atau sistem pendingin.',
+        price_idr: 150000,
+      },
+    ],
+  },
+];
+
+const ALL_TIERS = GIGS.flatMap((gig) => gig.tiers);
+
 type MockOrderItem = {
   id: string;
   product_id: string | null;
@@ -306,6 +342,27 @@ const ROUTES: Route[] = [
     },
   },
 
+  // ---- phase 3: gigs ----
+  {
+    method: 'get',
+    path: /^\/market\/v1\/gigs$/,
+    reply: (config) => {
+      const q = String(((config.params ?? {}) as { q?: string }).q ?? '').toLowerCase();
+      const filtered = q ? GIGS.filter((g) => g.title.toLowerCase().includes(q)) : GIGS;
+      const { rows, pagination } = paginate(filtered, config);
+      return { status: 200, body: envelope(rows, { pagination }) };
+    },
+  },
+  {
+    method: 'get',
+    path: /^\/market\/v1\/gigs\/[^/]+$/,
+    reply: (config) => {
+      const gig = GIGS.find((g) => g.id === segment(config, 0));
+      if (!gig) return { status: 404, body: notFound() };
+      return { status: 200, body: envelope(gig) };
+    },
+  },
+
   // ---- phase 2: orders ----
   {
     method: 'get',
@@ -327,26 +384,31 @@ const ROUTES: Route[] = [
     method: 'post',
     path: /^\/market\/v1\/orders$/,
     reply: (config) => {
-      const body = bodyOf<{ product_id?: string; quantity?: number }>(config);
-      const product = PRODUCTS.find((p) => p.id === body.product_id);
-      if (!product) return { status: 404, body: notFound() };
+      const body = bodyOf<{ product_id?: string; gig_tier_id?: string; quantity?: number }>(config);
 
-      const quantity = body.quantity ?? 1;
-      const subtotal = product.price_idr * quantity;
+      // Exactly one of product_id / gig_tier_id, per CreateOrderRequest.
+      const product = body.product_id ? PRODUCTS.find((p) => p.id === body.product_id) : undefined;
+      const tier = body.gig_tier_id ? ALL_TIERS.find((t) => t.id === body.gig_tier_id) : undefined;
+      if (!product && !tier) return { status: 404, body: notFound() };
+
+      const gig = tier ? GIGS.find((g) => g.id === tier.gig_id) : undefined;
+      const quantity = product ? (body.quantity ?? 1) : 1;
+      const unitPrice = product ? product.price_idr : tier!.price_idr;
+      const subtotal = unitPrice * quantity;
       const now = new Date().toISOString();
       const order: MockOrder = {
         id: nextId('5'),
-        source: 'product',
+        source: product ? 'product' : 'gig',
         status: 'pending_payment',
         customer: CUSTOMER,
-        lapak: product.lapak,
+        lapak: product ? product.lapak : gig!.lapak,
         items: [
           {
             id: nextId('8'),
-            product_id: product.id,
-            gig_tier_id: null,
-            name: product.title,
-            unit_price_idr: product.price_idr,
+            product_id: product?.id ?? null,
+            gig_tier_id: tier?.id ?? null,
+            name: product ? product.title : `${gig!.title} — ${tier!.name}`,
+            unit_price_idr: unitPrice,
             quantity,
             subtotal_idr: subtotal,
             status: 'unpaid',
@@ -444,6 +506,40 @@ const ROUTES: Route[] = [
         status: 200,
         body: envelope({ order, payment, wallet_balance_idr: WALLET.balance_idr }),
       };
+    },
+  },
+
+  {
+    method: 'post',
+    path: /^\/market\/v1\/orders\/[^/]+\/items$/,
+    reply: (config) => {
+      const order = ORDERS.find((o) => o.id === segment(config, 1));
+      if (!order) return { status: 404, body: notFound() };
+      const body = bodyOf<{ gig_tier_id?: string }>(config);
+      const tier = ALL_TIERS.find((t) => t.id === body.gig_tier_id);
+      if (!tier) return { status: 404, body: notFound() };
+      if (order.status === 'completed' || order.status === 'cancelled') {
+        return { status: 409, body: errorBody('detail', 'Pesanan sudah selesai.') };
+      }
+
+      const gig = GIGS.find((g) => g.id === tier.gig_id);
+      // The upsell adds a SECOND item to the SAME order, so paying again
+      // produces a second payment row against one order id — goal.md
+      // criterion 3 as a data fact rather than a special case.
+      order.items.push({
+        id: nextId('8'),
+        product_id: null,
+        gig_tier_id: tier.id,
+        name: `${gig?.title ?? ''} — ${tier.name}`.trim(),
+        unit_price_idr: tier.price_idr,
+        quantity: 1,
+        subtotal_idr: tier.price_idr,
+        status: 'unpaid',
+        created_at: new Date().toISOString(),
+      });
+      order.total_idr += tier.price_idr;
+      order.outstanding_idr += tier.price_idr;
+      return { status: 201, body: envelope(order) };
     },
   },
 
