@@ -7,6 +7,12 @@ export type ConfigValue = {
   appVersion: string;
   serverUrl: string;
   assetsDir: string;
+  /**
+   * Dev-only: serve `/market/v1/*` from the in-repo mock adapter instead of the
+   * backend, so FE builds against the signed contract without waiting on BE.
+   * Off in committed code; QA always runs it off (product ruling 2026-09-02).
+   */
+  useMocks: boolean;
   auth: {
     method: 'jwt';
     skip: boolean;
@@ -24,6 +30,7 @@ export const CONFIG: ConfigValue = {
   appVersion: packageJson.version,
   serverUrl: import.meta.env.VITE_SERVER_URL ?? '',
   assetsDir: import.meta.env.VITE_ASSETS_DIR ?? '',
+  useMocks: import.meta.env.VITE_USE_MOCKS === 'true',
   auth: {
     method: 'jwt',
     skip: false,

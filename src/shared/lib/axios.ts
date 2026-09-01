@@ -190,4 +190,53 @@ export const endpoints = {
       public: '/core/v1/translation-overrides',
     },
   },
+  // --------------------------------------------------------------------------
+  // SIAKANG marketplace — contract/api-v1.yaml v1, dual-signed 2026-09-02.
+  // Not company-scoped: /market/v1/* runs JWTAuth() only, so no switch-company
+  // step exists in any marketplace flow.
+  // --------------------------------------------------------------------------
+  market: {
+    me: '/market/v1/me',
+    config: '/market/v1/config',
+    wallet: {
+      root: '/market/v1/wallet',
+      ledger: '/market/v1/wallet/ledger',
+    },
+    products: {
+      list: '/market/v1/products',
+      byId: (id: string) => `/market/v1/products/${id}`,
+    },
+    gigs: {
+      list: '/market/v1/gigs',
+      byId: (id: string) => `/market/v1/gigs/${id}`,
+    },
+    orders: {
+      list: '/market/v1/orders',
+      byId: (id: string) => `/market/v1/orders/${id}`,
+      pay: (id: string) => `/market/v1/orders/${id}/pay`,
+      items: (id: string) => `/market/v1/orders/${id}/items`,
+      complete: (id: string) => `/market/v1/orders/${id}/complete`,
+      confirm: (id: string) => `/market/v1/orders/${id}/confirm`,
+    },
+    bidCategories: '/market/v1/bid-categories',
+    bids: {
+      list: '/market/v1/bids',
+      byId: (id: string) => `/market/v1/bids/${id}`,
+      confirm: (id: string) => `/market/v1/bids/${id}/confirm`,
+      accept: (id: string) => `/market/v1/bids/${id}/accept`,
+      offers: (id: string) => `/market/v1/bids/${id}/offers`,
+      award: (id: string, offerId: string) =>
+        `/market/v1/bids/${id}/offers/${offerId}/award`,
+    },
+    chat: {
+      threads: '/market/v1/chat/threads',
+      messages: (threadId: string) => `/market/v1/chat/threads/${threadId}/messages`,
+      // EventSource cannot send an Authorization header, so the access token
+      // travels as a query param (documented contract tradeoff, v2 moves to a
+      // ticket endpoint). Build the absolute URL — EventSource ignores the
+      // axios baseURL.
+      stream: (threadId: string, token: string) =>
+        `${CONFIG.serverUrl}/market/v1/chat/threads/${threadId}/stream?token=${encodeURIComponent(token)}`,
+    },
+  },
 } as const;
