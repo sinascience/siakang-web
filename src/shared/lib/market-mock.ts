@@ -658,7 +658,63 @@ function findRoute(config: InternalAxiosRequestConfig): Route | undefined {
  * the UI; live delivery is verified against the real backend at phase QA, which
  * is the only place it can be verified honestly anyway.
  */
+/**
+ * Make a mocked run impossible to mistake for a real one.
+ *
+ * A wrong backend port yields empty-but-successful responses — those look wrong
+ * and get investigated. Mocks fail the other way: the fixtures here are
+ * deliberately realistic, down to a working checkout and a genuine 402 at wallet
+ * depletion, so a stray `VITE_USE_MOCKS=true` yields a populated, coherent,
+ * entirely fake app. That is a false PASS, and it survives review.
+ *
+ * So say so twice: in the console for logs, and on the page for screenshots —
+ * a console line is invisible in a screenshot taken without DevTools open, and
+ * screenshots are how QA runs are reported.
+ */
+function announceMockMode(): void {
+   
+  console.warn(
+    '%c MOCKS ON %c /market/v1/* is served from src/shared/lib/market-mock.ts — this is NOT the real backend.',
+    'background:#B71C1C;color:#fff;font-weight:700',
+    'color:#B71C1C;font-weight:600'
+  );
+
+  if (typeof document === 'undefined') return;
+
+  const paint = () => {
+    if (document.getElementById('market-mock-badge')) return;
+    const badge = document.createElement('div');
+    badge.id = 'market-mock-badge';
+    badge.textContent = 'MOCK DATA — not the real backend';
+    badge.setAttribute('data-testid', 'market-mock-badge');
+    badge.style.cssText = [
+      'position:fixed',
+      'left:0',
+      'right:0',
+      'bottom:0',
+      'z-index:2147483647',
+      'padding:4px 8px',
+      'background:#B71C1C',
+      'color:#fff',
+      'font:600 12px/1.4 ui-monospace,monospace',
+      'text-align:center',
+      'letter-spacing:.04em',
+      // Never swallow a click meant for the app underneath it.
+      'pointer-events:none',
+    ].join(';');
+    document.body.appendChild(badge);
+  };
+
+  if (document.body) {
+    paint();
+  } else {
+    document.addEventListener('DOMContentLoaded', paint, { once: true });
+  }
+}
+
 export function installMarketMock(instance: AxiosInstance): void {
+  announceMockMode();
+
   const realAdapter = instance.defaults.adapter as AxiosAdapter;
 
   instance.defaults.adapter = async (config) => {
