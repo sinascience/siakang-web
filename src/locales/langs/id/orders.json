@@ -34,9 +34,6 @@
     "status": "Status",
     "outstanding": "Sisa {{amount}}"
   },
-  "rowActions": {
-    "viewDetail": "Lihat Detail"
-  },
   "list": {
     "emptyTitle": "Belum ada pesanan",
     "emptySubtitle": "Pesanan yang Anda buat atau terima akan muncul di sini.",

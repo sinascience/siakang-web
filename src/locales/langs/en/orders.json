@@ -34,9 +34,6 @@
     "status": "Status",
     "outstanding": "{{amount}} left"
   },
-  "rowActions": {
-    "viewDetail": "View Detail"
-  },
   "list": {
     "emptyTitle": "No orders yet",
     "emptySubtitle": "Orders you place or receive will show up here.",

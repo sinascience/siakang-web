@@ -63,7 +63,6 @@ export function OrdersListView() {
       { id: 'lapak', label: t('table.lapak') },
       { id: 'total', label: t('table.total'), align: 'right' as const },
       { id: 'status', label: t('table.status') },
-      { id: 'actions', label: '', align: 'right' as const },
     ],
     [t]
   );
