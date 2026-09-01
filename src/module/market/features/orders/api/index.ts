@@ -1,5 +1,5 @@
 import type { ApiEnvelope } from 'src/module/core/features/auth/types';
-import type { Order, Payment, ListMeta, OrderCounts, OrderListParams } from '../types';
+import type { Order, ListMeta, PayResult, OrderCounts, OrderListParams, CreateOrderParams } from '../types';
 
 import axios, { endpoints, flattenFieldErrors } from 'src/shared/lib/axios';
 
@@ -59,20 +59,6 @@ export function getOrder(id: string): Promise<Order> {
 // need live here instead, next to the calls that use them.
 // ----------------------------------------------------------------------
 
-/** `CreateOrderRequest` from the contract — exactly one of `product_id` / `gig_tier_id`. */
-export type CreateOrderParams = {
-  product_id?: string;
-  gig_tier_id?: string;
-  /** min 1, default 1 — products only. */
-  quantity?: number;
-};
-
-/** `PayResult` from the contract. `wallet_balance_idr` is the balance AFTER the charge. */
-export type PayResult = {
-  order: Order;
-  payment: Payment;
-  wallet_balance_idr: number;
-};
 
 /**
  * `POST /orders` — creates the order in `pending_payment` with one unpaid

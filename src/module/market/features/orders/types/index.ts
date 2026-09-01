@@ -120,3 +120,18 @@ export type ListMeta = {
   total_pages: number;
   counts?: OrderCounts;
 };
+
+/** `CreateOrderRequest` from the contract — exactly one of `product_id` / `gig_tier_id`. */
+export type CreateOrderParams = {
+  product_id?: string;
+  gig_tier_id?: string;
+  /** min 1, default 1 — products only. */
+  quantity?: number;
+};
+
+/** `PayResult` from the contract. `wallet_balance_idr` is the balance AFTER the charge. */
+export type PayResult = {
+  order: Order;
+  payment: Payment;
+  wallet_balance_idr: number;
+};

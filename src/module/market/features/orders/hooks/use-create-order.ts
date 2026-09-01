@@ -1,5 +1,4 @@
-import type { Order } from '../types';
-import type { CreateOrderParams } from '../api';
+import type { Order , CreateOrderParams } from '../types';
 
 import i18n from 'i18next';
 import { useState, useCallback } from 'react';

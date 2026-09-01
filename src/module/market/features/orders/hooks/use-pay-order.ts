@@ -1,4 +1,4 @@
-import type { PayResult } from '../api';
+import type { PayResult } from '../types';
 
 import i18n from 'i18next';
 import { useState, useCallback } from 'react';
