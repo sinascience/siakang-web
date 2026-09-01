@@ -1,0 +1,89 @@
+{
+  "title": "Item",
+  "titleEmpty": "Item Empty",
+  "buttons": {
+    "new": "Item"
+  },
+  "statuses": {
+    "active": "Aktif",
+    "inactive": "Tidak Aktif"
+  },
+  "categories": {
+    "electronics": "Elektronik",
+    "furniture": "Furnitur",
+    "stationery": "Alat Tulis",
+    "food": "Makanan",
+    "other": "Lainnya"
+  },
+  "toolbar": {
+    "searchPlaceholder": "Cari nama atau kode item...",
+    "category": "Kategori",
+    "allCategories": "Semua Kategori"
+  },
+  "table": {
+    "code": "Kode",
+    "name": "Nama",
+    "category": "Kategori",
+    "price": "Harga",
+    "stock": "Stok",
+    "status": "Status"
+  },
+  "form": {
+    "newTitle": "Tambah Item",
+    "editTitle": "Ubah Item {{name}}",
+    "name": "Nama Item",
+    "code": "Kode",
+    "codeHint": "Kosongkan untuk auto-generate (ITM0001, ITM0002, ...).",
+    "codeImmutable": "Tidak bisa diubah setelah dibuat.",
+    "category": "Kategori",
+    "price": "Harga",
+    "stock": "Stok",
+    "description": "Deskripsi",
+    "status": "Status",
+    "isActive": "Aktif"
+  },
+  "validation": {
+    "nameMin": "Nama minimal 2 karakter.",
+    "nameMax": "Nama maksimal 255 karakter.",
+    "priceRequired": "Harga wajib diisi.",
+    "priceMin": "Harga harus lebih dari 0.",
+    "stockRequired": "Stok wajib diisi.",
+    "stockMin": "Stok tidak boleh negatif.",
+    "descMax": "Deskripsi maksimal 500 karakter."
+  },
+  "delete": {
+    "title": "Hapus Item",
+    "message": "Item {{name}} akan dihapus."
+  },
+  "detail": {
+    "title": "Detail Item"
+  },
+  "rowActions": {
+    "viewDetail": "Lihat Detail",
+    "edit": "Ubah",
+    "delete": "Hapus"
+  },
+  "list": {
+    "emptyTitle": "Belum ada item",
+    "emptySubtitle": "Klik \"Item\" untuk membuat item baru."
+  },
+  "emptyState": {
+    "videoTitle": "Cara membuat item",
+    "title": "Kelola Produk dan Stok dengan Item",
+    "description": "Buat item untuk mencatat produk, harga, dan stok Anda. Semua transaksi penjualan dan pembelian akan mengacu pada item ini.",
+    "create": "Buat Item",
+    "import": "Impor Item",
+    "watch": "Putar tur singkat",
+    "tourBadge": "Tur 2 menit"
+  },
+  "feedback": {
+    "saved": "Item {{name}} tersimpan.",
+    "deleted": "Item dihapus.",
+    "imported": "{{count}} item contoh berhasil diimpor."
+  },
+  "errors": {
+    "loadData": "Gagal memuat item.",
+    "saveFailed": "Gagal menyimpan item.",
+    "deleteFailed": "Gagal menghapus item."
+  }
+}

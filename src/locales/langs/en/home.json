@@ -1,0 +1,27 @@
+{
+  "title": "Home",
+  "subtitle": "Welcome. Pick a menu from the sidebar to get started.",
+  "greeting": "Welcome back, {{name}}",
+  "greetingGuest": "Welcome back",
+  "intro": "A quick overview and fast access to your dashboards.",
+  "stats": {
+    "revenue": "Revenue This Month",
+    "orders": "Orders",
+    "uptime": "System Uptime",
+    "users": "Active Users"
+  },
+  "shortcuts": {
+    "title": "Quick Access",
+    "open": "Open",
+    "finance": "Finance Dashboard",
+    "financeDesc": "Revenue, expenses, and cash flow.",
+    "monitoring": "Monitoring Dashboard",
+    "monitoringDesc": "System health and traffic.",
+    "sales": "Sales Dashboard",
+    "salesDesc": "Sales performance and conversion."
+  },
+  "activity": {
+    "title": "Recent Activity",
+    "live": "Live"
+  }
+}

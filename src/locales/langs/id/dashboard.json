@@ -1,0 +1,98 @@
+{
+  "finance": {
+    "title": "Dashboard Keuangan",
+    "subtitle": "Pendapatan, biaya, dan posisi kas dalam sekejap.",
+    "vsLastMonth": "vs bulan lalu",
+    "kpi": {
+      "revenue": "Total Pendapatan",
+      "expense": "Total Pengeluaran",
+      "profit": "Laba Bersih",
+      "cash": "Saldo Kas"
+    },
+    "charts": {
+      "revenueVsExpense": "Pendapatan vs Pengeluaran",
+      "inMillions": "Dalam juta IDR",
+      "expenseByCategory": "Pengeluaran per Kategori",
+      "cashFlow": "Arus Kas Bulanan",
+      "budgetUsage": "Penggunaan Anggaran",
+      "recentTx": "Transaksi Terbaru"
+    },
+    "series": {
+      "revenue": "Pendapatan",
+      "expense": "Pengeluaran",
+      "cashIn": "Kas Masuk",
+      "cashOut": "Kas Keluar"
+    },
+    "table": {
+      "invoice": "Invoice",
+      "client": "Klien",
+      "date": "Tanggal",
+      "amount": "Jumlah",
+      "status": "Status"
+    },
+    "status": {
+      "completed": "Selesai",
+      "pending": "Tertunda",
+      "failed": "Gagal"
+    }
+  },
+  "monitoring": {
+    "title": "Dashboard Monitoring",
+    "subtitle": "Kesehatan sistem, trafik, dan status layanan secara real-time.",
+    "vsYesterday": "vs kemarin",
+    "kpi": {
+      "uptime": "Uptime",
+      "response": "Rata-rata Respons",
+      "requests": "Permintaan",
+      "errors": "Tingkat Error"
+    },
+    "charts": {
+      "requestVolume": "Volume Permintaan",
+      "requestVolumeSub": "Permintaan per menit (ribuan), 24 jam terakhir",
+      "resources": "Penggunaan Resource",
+      "latency": "Latensi",
+      "latencySub": "Waktu respons dalam ms, 24 jam terakhir",
+      "serviceHealth": "Kesehatan Layanan",
+      "httpStatus": "Kode Status HTTP"
+    },
+    "series": {
+      "requests": "Permintaan",
+      "p50": "p50",
+      "p95": "p95",
+      "responses": "Respons"
+    },
+    "status": {
+      "operational": "Operasional",
+      "degraded": "Menurun",
+      "down": "Mati"
+    }
+  },
+  "sales": {
+    "title": "Dashboard Penjualan",
+    "subtitle": "Performa penjualan, channel, dan konversi.",
+    "vsLastPeriod": "vs periode lalu",
+    "kpi": {
+      "sales": "Total Penjualan",
+      "orders": "Pesanan",
+      "conversion": "Tingkat Konversi",
+      "aov": "Rata-rata Nilai Order"
+    },
+    "charts": {
+      "salesTrend": "Tren Penjualan",
+      "inMillions": "Dalam juta IDR",
+      "trafficSources": "Sumber Trafik",
+      "byChannel": "Penjualan per Channel",
+      "topProducts": "Produk Terlaris",
+      "funnel": "Funnel Konversi",
+      "funnelSub": "Dari kunjungan ke pembelian"
+    },
+    "series": {
+      "sales": "Penjualan",
+      "channel": "Penjualan",
+      "users": "Pengguna"
+    },
+    "product": {
+      "sold": "terjual"
+    }
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "title": "Pesanan",
+  "subtitle": "Contoh list dengan halaman detail terpisah — klik baris untuk membuka detail.",
+  "statuses": {
+    "pending": "Menunggu",
+    "processing": "Diproses",
+    "shipped": "Dikirim",
+    "completed": "Selesai",
+    "cancelled": "Dibatalkan"
+  },
+  "payments": {
+    "transfer": "Transfer Bank",
+    "card": "Kartu Kredit",
+    "ewallet": "E-Wallet",
+    "cod": "Bayar di Tempat"
+  },
+  "toolbar": {
+    "searchPlaceholder": "Cari nomor pesanan atau nama pelanggan...",
+    "status": "Status",
+    "allStatuses": "Semua Status"
+  },
+  "table": {
+    "number": "No. Pesanan",
+    "customer": "Pelanggan",
+    "date": "Tanggal",
+    "items": "Item",
+    "total": "Total",
+    "status": "Status"
+  },
+  "rowActions": {
+    "viewDetail": "Lihat Detail",
+    "delete": "Hapus"
+  },
+  "lines": {
+    "title": "Item Pesanan",
+    "product": "Produk",
+    "qty": "Qty",
+    "unitPrice": "Harga Satuan",
+    "subtotal": "Subtotal"
+  },
+  "totals": {
+    "subtotal": "Subtotal",
+    "shipping": "Ongkos Kirim",
+    "discount": "Diskon",
+    "total": "Total"
+  },
+  "detail": {
+    "title": "Detail Pesanan",
+    "backToList": "Kembali ke daftar pesanan",
+    "notFoundTitle": "Pesanan tidak ditemukan",
+    "notFoundSubtitle": "Pesanan sudah dihapus atau tautannya tidak valid.",
+    "summaryTitle": "Ringkasan",
+    "customerTitle": "Pelanggan",
+    "timelineTitle": "Riwayat Status",
+    "orderDate": "Tanggal Pesan",
+    "lastUpdate": "Terakhir Diperbarui",
+    "paymentMethod": "Metode Bayar",
+    "itemCount": "Jumlah Item",
+    "customerName": "Nama",
+    "email": "Email",
+    "phone": "Telepon",
+    "shippingAddress": "Alamat Kirim"
+  },
+  "delete": {
+    "title": "Hapus Pesanan",
+    "message": "Pesanan {{number}} akan dihapus."
+  },
+  "feedback": {
+    "deleted": "Pesanan {{number}} dihapus."
+  },
+  "errors": {
+    "loadData": "Gagal memuat pesanan.",
+    "loadDetail": "Gagal memuat detail pesanan.",
+    "deleteFailed": "Gagal menghapus pesanan."
+  }
+}

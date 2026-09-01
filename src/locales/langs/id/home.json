@@ -1,0 +1,27 @@
+{
+  "title": "Beranda",
+  "subtitle": "Selamat datang. Pilih menu dari sidebar untuk mulai.",
+  "greeting": "Selamat datang, {{name}}",
+  "greetingGuest": "Selamat datang",
+  "intro": "Ringkasan singkat dan akses cepat ke dashboard Anda.",
+  "stats": {
+    "revenue": "Pendapatan Bulan Ini",
+    "orders": "Pesanan",
+    "uptime": "Uptime Sistem",
+    "users": "Pengguna Aktif"
+  },
+  "shortcuts": {
+    "title": "Akses Cepat",
+    "open": "Buka",
+    "finance": "Dashboard Keuangan",
+    "financeDesc": "Pendapatan, biaya, dan arus kas.",
+    "monitoring": "Dashboard Monitoring",
+    "monitoringDesc": "Kesehatan sistem dan trafik.",
+    "sales": "Dashboard Penjualan",
+    "salesDesc": "Performa penjualan dan konversi."
+  },
+  "activity": {
+    "title": "Aktivitas Terbaru",
+    "live": "Live"
+  }
+}

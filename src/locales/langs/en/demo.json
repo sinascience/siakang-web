@@ -1,0 +1,89 @@
+{
+  "title": "Item",
+  "titleEmpty": "Item Empty",
+  "buttons": {
+    "new": "Item"
+  },
+  "statuses": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "categories": {
+    "electronics": "Electronics",
+    "furniture": "Furniture",
+    "stationery": "Stationery",
+    "food": "Food",
+    "other": "Other"
+  },
+  "toolbar": {
+    "searchPlaceholder": "Search item name or code...",
+    "category": "Category",
+    "allCategories": "All Categories"
+  },
+  "table": {
+    "code": "Code",
+    "name": "Name",
+    "category": "Category",
+    "price": "Price",
+    "stock": "Stock",
+    "status": "Status"
+  },
+  "form": {
+    "newTitle": "Add Item",
+    "editTitle": "Edit Item {{name}}",
+    "name": "Item Name",
+    "code": "Code",
+    "codeHint": "Leave empty to auto-generate (ITM0001, ITM0002, ...).",
+    "codeImmutable": "Cannot be changed after creation.",
+    "category": "Category",
+    "price": "Price",
+    "stock": "Stock",
+    "description": "Description",
+    "status": "Status",
+    "isActive": "Active"
+  },
+  "validation": {
+    "nameMin": "Name must be at least 2 characters.",
+    "nameMax": "Name must be at most 255 characters.",
+    "priceRequired": "Price is required.",
+    "priceMin": "Price must be greater than 0.",
+    "stockRequired": "Stock is required.",
+    "stockMin": "Stock cannot be negative.",
+    "descMax": "Description must be at most 500 characters."
+  },
+  "delete": {
+    "title": "Delete Item",
+    "message": "Item {{name}} will be deleted."
+  },
+  "detail": {
+    "title": "Item Detail"
+  },
+  "rowActions": {
+    "viewDetail": "View Detail",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "list": {
+    "emptyTitle": "No items yet",
+    "emptySubtitle": "Click \"Item\" to create a new item."
+  },
+  "emptyState": {
+    "videoTitle": "How to create an item",
+    "title": "Manage Your Products and Stock With Items",
+    "description": "Create items to track your products, prices, and stock levels. Every sales and purchase transaction references these items.",
+    "create": "Create Item",
+    "import": "Import Items",
+    "watch": "Play a quick tour",
+    "tourBadge": "2 min tour"
+  },
+  "feedback": {
+    "saved": "Item {{name}} saved.",
+    "deleted": "Item deleted.",
+    "imported": "{{count}} sample items imported successfully."
+  },
+  "errors": {
+    "loadData": "Failed to load items.",
+    "saveFailed": "Failed to save item.",
+    "deleteFailed": "Failed to delete item."
+  }
+}

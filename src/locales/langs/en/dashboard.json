@@ -1,0 +1,98 @@
+{
+  "finance": {
+    "title": "Finance Dashboard",
+    "subtitle": "Revenue, expenses, and cash position at a glance.",
+    "vsLastMonth": "vs last month",
+    "kpi": {
+      "revenue": "Total Revenue",
+      "expense": "Total Expense",
+      "profit": "Net Profit",
+      "cash": "Cash Balance"
+    },
+    "charts": {
+      "revenueVsExpense": "Revenue vs Expense",
+      "inMillions": "In millions IDR",
+      "expenseByCategory": "Expense by Category",
+      "cashFlow": "Monthly Cash Flow",
+      "budgetUsage": "Budget Usage",
+      "recentTx": "Recent Transactions"
+    },
+    "series": {
+      "revenue": "Revenue",
+      "expense": "Expense",
+      "cashIn": "Cash In",
+      "cashOut": "Cash Out"
+    },
+    "table": {
+      "invoice": "Invoice",
+      "client": "Client",
+      "date": "Date",
+      "amount": "Amount",
+      "status": "Status"
+    },
+    "status": {
+      "completed": "Completed",
+      "pending": "Pending",
+      "failed": "Failed"
+    }
+  },
+  "monitoring": {
+    "title": "Monitoring Dashboard",
+    "subtitle": "System health, traffic, and service status in real time.",
+    "vsYesterday": "vs yesterday",
+    "kpi": {
+      "uptime": "Uptime",
+      "response": "Avg Response",
+      "requests": "Requests",
+      "errors": "Error Rate"
+    },
+    "charts": {
+      "requestVolume": "Request Volume",
+      "requestVolumeSub": "Requests per minute (thousands), last 24h",
+      "resources": "Resource Usage",
+      "latency": "Latency",
+      "latencySub": "Response time in ms, last 24h",
+      "serviceHealth": "Service Health",
+      "httpStatus": "HTTP Status Codes"
+    },
+    "series": {
+      "requests": "Requests",
+      "p50": "p50",
+      "p95": "p95",
+      "responses": "Responses"
+    },
+    "status": {
+      "operational": "Operational",
+      "degraded": "Degraded",
+      "down": "Down"
+    }
+  },
+  "sales": {
+    "title": "Sales Dashboard",
+    "subtitle": "Sales performance, channels, and conversion.",
+    "vsLastPeriod": "vs last period",
+    "kpi": {
+      "sales": "Total Sales",
+      "orders": "Orders",
+      "conversion": "Conversion Rate",
+      "aov": "Avg Order Value"
+    },
+    "charts": {
+      "salesTrend": "Sales Trend",
+      "inMillions": "In millions IDR",
+      "trafficSources": "Traffic Sources",
+      "byChannel": "Sales by Channel",
+      "topProducts": "Top Products",
+      "funnel": "Conversion Funnel",
+      "funnelSub": "From visit to purchase"
+    },
+    "series": {
+      "sales": "Sales",
+      "channel": "Sales",
+      "users": "Users"
+    },
+    "product": {
+      "sold": "sold"
+    }
+  }
+}
