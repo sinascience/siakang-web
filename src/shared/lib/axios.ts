@@ -90,14 +90,43 @@ axiosInstance.interceptors.response.use(
   }
 );
 
+/**
+ * Envelope error shape. `core/v1/*` (the skeleton) sends a plain string; the
+ * SIAKANG `market/v1/*` contract pins `map<string, string[]>` — field name to
+ * messages, with the reserved key `detail` for non-field errors. Both are
+ * accepted here so one interceptor serves both API halves.
+ */
+export type ApiFieldErrors = Record<string, string[]>;
+
+/** Flatten the error map to one human string: `detail` wins, else the first field's first message. */
+function flattenFieldErrors(errors: ApiFieldErrors): string | undefined {
+  const detail = errors.detail?.[0];
+  if (detail) return detail;
+  return Object.values(errors).flat().find(Boolean);
+}
+
 function normalizeError(error: unknown): Error {
   if (axios.isAxiosError(error)) {
     const payload = error.response?.data as
-      | { message?: string; errors?: string | null }
+      | { message?: string; errors?: string | ApiFieldErrors | null }
       | undefined;
-    const detail = payload?.errors || payload?.message || error.message || 'Something went wrong!';
-    const wrapped = new Error(detail);
-    (wrapped as Error & { status?: number }).status = error.response?.status;
+
+    const raw = payload?.errors;
+    const fieldErrors = raw && typeof raw === 'object' ? (raw as ApiFieldErrors) : undefined;
+
+    const detail =
+      (typeof raw === 'string' ? raw : fieldErrors && flattenFieldErrors(fieldErrors)) ||
+      payload?.message ||
+      error.message ||
+      'Something went wrong!';
+
+    const wrapped = new Error(detail) as Error & {
+      status?: number;
+      fieldErrors?: ApiFieldErrors;
+    };
+    wrapped.status = error.response?.status;
+    // Forms map this onto react-hook-form field errors; toasts/ErrorDialog use `.message`.
+    if (fieldErrors) wrapped.fieldErrors = fieldErrors;
     return wrapped;
   }
   if (error instanceof Error) return error;

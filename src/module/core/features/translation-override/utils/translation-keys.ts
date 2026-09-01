@@ -6,12 +6,12 @@ import type { TranslationKeyInfo } from '../types';
 // is the same whether we glob-import here or lazy-load via i18next.
 // ----------------------------------------------------------------------
 
-const idBundles = import.meta.glob<Record<string, unknown>>('/src/locales/langs/id/*.json', {
+const idBundles = import.meta.glob<Record<string, unknown>>('src/locales/langs/id/*.json', {
   eager: true,
   import: 'default',
 });
 
-const enBundles = import.meta.glob<Record<string, unknown>>('/src/locales/langs/en/*.json', {
+const enBundles = import.meta.glob<Record<string, unknown>>('src/locales/langs/en/*.json', {
   eager: true,
   import: 'default',
 });
