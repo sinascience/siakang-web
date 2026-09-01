@@ -429,6 +429,51 @@ const ROUTES: Route[] = [
     },
   },
 
+  // `complete` and `confirm` are phase-3 endpoints (FE-C/FE-I own the UI), but
+  // they are mocked here from phase 2 because they are the ONLY way to drive an
+  // order into `awaiting_confirmation` — without them FE-G's confirm-deadline
+  // countdown cannot be exercised in a browser at all. Found by fe-task-g.
+  {
+    method: 'post',
+    path: /^\/market\/v1\/orders\/[^/]+\/complete$/,
+    reply: (config) => {
+      const order = ORDERS.find((o) => o.id === segment(config, 1));
+      if (!order) return { status: 404, body: notFound() };
+      if (order.outstanding_idr > 0) {
+        return { status: 409, body: errorBody('detail', 'Pesanan masih memiliki tagihan.') };
+      }
+      order.status = 'awaiting_confirmation';
+      // Seeded window is 60s (contract x-seed-data), short on purpose so the
+      // auto-confirm path is observable rather than a 24h wait.
+      order.confirm_deadline_at = new Date(
+        Date.now() + CONFIG_ROW.order_auto_confirm_seconds * 1000
+      ).toISOString();
+      return { status: 200, body: envelope(order) };
+    },
+  },
+  {
+    method: 'post',
+    path: /^\/market\/v1\/orders\/[^/]+\/confirm$/,
+    reply: (config) => {
+      const order = ORDERS.find((o) => o.id === segment(config, 1));
+      if (!order) return { status: 404, body: notFound() };
+      if (order.status === 'completed') {
+        // Idempotent against the sweeper, exactly as the contract specifies:
+        // if the window elapsed first the order is already completed, and this
+        // returns it rather than paying the lapak twice.
+        return { status: 200, body: envelope(order) };
+      }
+      if (order.status !== 'awaiting_confirmation') {
+        return { status: 409, body: errorBody('detail', 'Pesanan belum selesai dikerjakan.') };
+      }
+      order.status = 'completed';
+      order.completed_at = new Date().toISOString();
+      order.confirm_deadline_at = null;
+      order.auto_confirmed = false;
+      return { status: 200, body: envelope(order) };
+    },
+  },
+
   // ---- phase 2: chat (REST half only — SSE is not mocked, see below) ----
   {
     method: 'get',
