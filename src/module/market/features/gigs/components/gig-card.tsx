@@ -6,13 +6,13 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 
+import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { useTranslate } from 'src/locales';
 import { Iconify } from 'src/shared/ui/iconify';
 import { formatIdr } from 'src/module/market/features/orders/utils/format';
 
-import { GIG_PATHS } from '../utils/paths';
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ export function GigCard({ gig }: Props) {
 
   return (
     <Card>
-      <CardActionArea component={RouterLink} href={GIG_PATHS.detail(gig.id)}>
+      <CardActionArea component={RouterLink} href={paths.dashboard.market.gig(gig.id)}>
         <Box sx={{ position: 'relative', pt: '100%', bgcolor: 'background.neutral' }}>
           {gig.image_url ? (
             <Box

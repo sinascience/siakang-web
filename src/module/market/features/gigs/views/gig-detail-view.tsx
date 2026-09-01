@@ -26,7 +26,6 @@ import { usePayOrder } from 'src/module/market/features/orders/hooks/use-pay-ord
 import { useCreateOrder } from 'src/module/market/features/orders/hooks/use-create-order';
 
 import { useGig } from '../hooks/use-gig';
-import { GIG_PATHS } from '../utils/paths';
 import { GigTierOption } from '../components/gig-tier-option';
 
 // ----------------------------------------------------------------------
@@ -55,7 +54,7 @@ export function GigDetailView() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [order, setOrder] = useState<Order | null>(null);
 
-  const backHref = GIG_PATHS.list;
+  const backHref = paths.dashboard.market.gigs;
 
   // Tiers come back price-ascending, so falling back to the first one makes the
   // consultation the default without an effect to seed state.

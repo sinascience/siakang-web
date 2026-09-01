@@ -26,6 +26,8 @@ export const paths = {
     market: {
       wallet: '/market/wallet',
       catalog: '/market/catalog',
+      gigs: '/market/gigs',
+      gig: (id: string) => `/market/gigs/${id}`,
       product: (id: string) => `/market/catalog/${id}`,
       orders: '/market/orders',
       order: (id: string) => `/market/orders/${id}`,
