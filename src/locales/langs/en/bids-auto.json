@@ -1,0 +1,88 @@
+{
+  "title": "Auto Bid",
+  "subtitle": "Create an automatic bid and let the platform find you the nearest worker.",
+  "createAction": "Auto Bid",
+  "table": {
+    "category": "Category",
+    "budget": "Budget",
+    "worker": "Matched Worker",
+    "status": "Status",
+    "date": "Date"
+  },
+  "list": {
+    "emptyTitle": "No automatic bids yet",
+    "emptySubtitle": "Click \"Auto Bid\" to have the platform find the nearest worker for you.",
+    "noMatchYet": "—"
+  },
+  "statuses": {
+    "matching": "Finding Worker",
+    "proposed": "Worker Found",
+    "customer_confirmed": "Waiting on Worker",
+    "accepted": "Accepted by Worker",
+    "no_match": "No Worker Available",
+    "open": "Open",
+    "awarded": "Awarded",
+    "ordered": "Order Created",
+    "cancelled": "Cancelled"
+  },
+  "form": {
+    "title": "Create Automatic Bid",
+    "category": "Job Category",
+    "budget": "Budget",
+    "description": "Note for the worker (optional)",
+    "descriptionPlaceholder": "Describe the work you need…",
+    "feeNotice": "A platform fee of {{fee}} will be deducted from your wallet right now, before a worker is matched. If no worker is available near you, this fee is refunded in full automatically.",
+    "feeLoading": "Loading platform fee…",
+    "submitAction": "Pay {{fee}} & Find Worker",
+    "createSuccess": "Automatic bid created.",
+    "validation": {
+      "categoryRequired": "Category is required.",
+      "budgetRequired": "Budget is required."
+    }
+  },
+  "detail": {
+    "title": "Auto Bid Detail",
+    "backToList": "Back to automatic bids",
+    "notFoundTitle": "Bid not found",
+    "notFoundSubtitle": "This bid was deleted or the link is invalid.",
+    "summaryTitle": "Bid Summary",
+    "budgetLabel": "Budget",
+    "feePaidLabel": "Platform Fee Paid",
+    "createdAtLabel": "Created At",
+    "workerLabel": "Worker Name",
+    "distanceLabel": "Distance",
+    "refreshAction": "Refresh"
+  },
+  "match": {
+    "title": "Worker Found",
+    "subtitle": "Confirm to continue — the worker will then be asked to accept your request.",
+    "ratingLabel": "Rating",
+    "distanceLabel": "{{km}} km",
+    "confirmAction": "Confirm This Worker",
+    "confirmSuccess": "Worker confirmed — waiting for the worker to accept."
+  },
+  "noMatch": {
+    "title": "No Worker Available",
+    "subtitle": "Every worker in this category is currently unavailable near your location.",
+    "refundNotice": "The platform fee you paid has been refunded in full to your wallet."
+  },
+  "waiting": {
+    "title": "Waiting for Worker to Accept",
+    "subtitle": "The worker has been confirmed and asked to accept this request. This page refreshes itself periodically — you can also refresh manually at any time."
+  },
+  "ready": {
+    "title": "Order Created",
+    "subtitle": "The worker accepted your request — the order is ready to continue.",
+    "viewOrderAction": "View Order"
+  },
+  "cancelled": {
+    "title": "Bid Cancelled"
+  },
+  "errors": {
+    "loadData": "Failed to load automatic bids.",
+    "loadDetail": "Failed to load bid detail.",
+    "loadCategories": "Failed to load job categories.",
+    "createFailed": "Failed to create automatic bid.",
+    "confirmFailed": "Failed to confirm worker."
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "title": "Lelang Otomatis",
+  "subtitle": "Buat lelang otomatis dan biarkan platform mencarikan pekerja terdekat untuk Anda.",
+  "createAction": "Lelang Otomatis",
+  "table": {
+    "category": "Kategori",
+    "budget": "Anggaran",
+    "worker": "Pekerja Tercocok",
+    "status": "Status",
+    "date": "Tanggal"
+  },
+  "list": {
+    "emptyTitle": "Belum ada lelang otomatis",
+    "emptySubtitle": "Klik \"Lelang Otomatis\" untuk mencari pekerja terdekat secara otomatis.",
+    "noMatchYet": "—"
+  },
+  "statuses": {
+    "matching": "Mencari Pekerja",
+    "proposed": "Pekerja Ditemukan",
+    "customer_confirmed": "Menunggu Pekerja",
+    "accepted": "Diterima Pekerja",
+    "no_match": "Tidak Ada Pekerja",
+    "open": "Terbuka",
+    "awarded": "Dimenangkan",
+    "ordered": "Pesanan Dibuat",
+    "cancelled": "Dibatalkan"
+  },
+  "form": {
+    "title": "Buat Lelang Otomatis",
+    "category": "Kategori Pekerjaan",
+    "budget": "Anggaran",
+    "description": "Catatan untuk pekerja (opsional)",
+    "descriptionPlaceholder": "Jelaskan pekerjaan yang Anda butuhkan…",
+    "feeNotice": "Biaya platform sebesar {{fee}} akan langsung dipotong dari saldo Anda saat ini juga, sebelum pekerja dicocokkan. Jika tidak ada pekerja yang tersedia di sekitar Anda, biaya ini otomatis dikembalikan penuh.",
+    "feeLoading": "Memuat biaya platform…",
+    "submitAction": "Bayar {{fee}} & Cari Pekerja",
+    "createSuccess": "Lelang otomatis dibuat.",
+    "validation": {
+      "categoryRequired": "Kategori wajib dipilih.",
+      "budgetRequired": "Anggaran wajib diisi."
+    }
+  },
+  "detail": {
+    "title": "Detail Lelang Otomatis",
+    "backToList": "Kembali ke daftar lelang otomatis",
+    "notFoundTitle": "Lelang tidak ditemukan",
+    "notFoundSubtitle": "Lelang sudah dihapus atau tautannya tidak valid.",
+    "summaryTitle": "Ringkasan Lelang",
+    "budgetLabel": "Anggaran",
+    "feePaidLabel": "Biaya Platform Dibayar",
+    "createdAtLabel": "Dibuat Pada",
+    "workerLabel": "Nama Pekerja",
+    "distanceLabel": "Jarak",
+    "refreshAction": "Segarkan"
+  },
+  "match": {
+    "title": "Pekerja Ditemukan",
+    "subtitle": "Konfirmasi untuk melanjutkan — pekerja akan diminta menerima permintaan Anda.",
+    "ratingLabel": "Rating",
+    "distanceLabel": "{{km}} km",
+    "confirmAction": "Konfirmasi Pekerja Ini",
+    "confirmSuccess": "Pekerja dikonfirmasi — menunggu penerimaan dari pekerja."
+  },
+  "noMatch": {
+    "title": "Tidak Ada Pekerja Tersedia",
+    "subtitle": "Semua pekerja pada kategori ini sedang tidak tersedia di sekitar lokasi Anda.",
+    "refundNotice": "Biaya platform yang sudah dibayar telah dikembalikan penuh ke saldo Anda."
+  },
+  "waiting": {
+    "title": "Menunggu Pekerja Menerima",
+    "subtitle": "Pekerja sudah dikonfirmasi dan diminta menerima permintaan ini. Halaman ini akan otomatis diperbarui secara berkala — Anda juga bisa menyegarkan manual kapan saja."
+  },
+  "ready": {
+    "title": "Pesanan Dibuat",
+    "subtitle": "Pekerja sudah menerima permintaan Anda — pesanan siap dilanjutkan.",
+    "viewOrderAction": "Lihat Pesanan"
+  },
+  "cancelled": {
+    "title": "Lelang Dibatalkan"
+  },
+  "errors": {
+    "loadData": "Gagal memuat daftar lelang otomatis.",
+    "loadDetail": "Gagal memuat detail lelang otomatis.",
+    "loadCategories": "Gagal memuat kategori pekerjaan.",
+    "createFailed": "Gagal membuat lelang otomatis.",
+    "confirmFailed": "Gagal mengonfirmasi pekerja."
+  }
+}
