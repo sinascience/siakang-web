@@ -44,13 +44,41 @@ route and persona behaves as it does in production.
 These mirror the contract's `x-seed-data`, so what you see under mocks is what
 the seeders produce.
 
-## Switching persona mid-flow
+## Switching persona mid-flow — READ THIS, the obvious way does not work
 
-Sign out and sign in as the other account. **Do not reload the page** if you care
-about state you have built up: the mock's orders, payments and chat threads live
-in module memory and are wiped by a reload, not by a sign-out. That is how you
-walk a two-party flow — buy and pay as `budi@`, sign out, sign in as `joko@`, and
-complete the order you just created.
+Sign out and sign in as the other account.
+
+> **⚠️ Known defect (found 2026-09-02 by `fe-task-i2`, verified): signing out
+> WIPES the mock's state.**
+>
+> An earlier version of this page told you to sign out rather than reload,
+> "because a reload wipes the mock and a sign-out does not". **That was wrong.**
+> `account-drawer.tsx`'s logout calls `signOut()` and then `router.refresh()`,
+> which is `navigate(0)` — a real document reload. So a sign-out *is* a reload,
+> and the orders, payments, bids, offers and chat threads you built up are gone
+> with it. Three phase-4 minors were given that wrong guidance.
+
+The mock's state lives in **module memory of one page context**. That means it
+does not survive a reload, and it is **not shared between tabs** — two tabs are
+two separate JavaScript contexts with two separate sets of fixtures. Signing in
+as the other persona in a second tab gives you a second, empty world.
+
+So, until this is fixed, to walk a two-party flow:
+
+- **Do the setup and the cross-persona step in one page context.** Build what you
+  need as the first persona, then switch without a document load.
+- If you are using a throwaway harness inside your `allowed_paths`, an in-page
+  persona swap is legitimate and is what previous minors did successfully.
+- **Say in your report which persona steps you actually exercised** and which you
+  could not. Do not describe a two-party flow as verified if the state was reset
+  between the halves.
+
+**Master follow-up, deliberately not done during the shutdown pause:** persist the
+mock's state to `sessionStorage` so a reload and therefore a sign-out stops
+destroying it. That is the real fix and it makes this whole section unnecessary.
+Removing the old `?lapak` URL flag in favour of real sign-in is what exposed this
+— the flag switched persona without a page load, which is exactly the property
+that got lost.
 
 ## The badge
 
