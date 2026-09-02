@@ -585,6 +585,90 @@ function createBidOrder(
   return order;
 }
 
+// ---------------------------------------------------------------- persistence
+//
+// The fixture used to live only in module memory, so any document load reset
+// it. That was survivable until the app's logout turned out to hard-reload
+// (FE-FIX-2): a dual-persona walk — the ONLY way to exercise flows B and C —
+// silently started over halfway through, and looked like a broken feature
+// rather than a lost fixture.
+//
+// Logout no longer reloads, but persisting is still the right belt: a stray
+// refresh, an HMR full-reload, or a guard redirect should not destroy an
+// hour of test state. sessionStorage, not localStorage, so the fixture dies
+// with the tab and each run starts from the seed unless you deliberately keep
+// the tab open.
+
+const STORE_KEY = 'siakang.mock.state.v1';
+
+type Snapshot = {
+  seq: number;
+  orders: MockOrder[];
+  bids: MockBid[];
+  offers: MockOffer[];
+  threads: typeof CHAT_THREADS;
+  messages: Record<string, MockMessage[]>;
+  wallets: Record<string, { user_id: string; balance_idr: number }>;
+  ledgers: Record<string, LedgerRow[]>;
+};
+
+/** Replace an array's contents in place — the bindings are `const` by design. */
+function refill<T>(target: T[], next: T[]): void {
+  target.splice(0, target.length, ...next);
+}
+
+/** Replace a record's contents in place. */
+function rekey<T>(target: Record<string, T>, next: Record<string, T>): void {
+  Object.keys(target).forEach((k) => delete target[k]);
+  Object.assign(target, next);
+}
+
+function persist(): void {
+  if (typeof sessionStorage === 'undefined') return;
+  try {
+    const snapshot: Snapshot = {
+      seq,
+      orders: ORDERS,
+      bids: BIDS,
+      offers: OFFERS,
+      threads: CHAT_THREADS,
+      messages: CHAT_MESSAGES,
+      wallets: WALLETS,
+      ledgers: LEDGERS,
+    };
+    sessionStorage.setItem(STORE_KEY, JSON.stringify(snapshot));
+  } catch {
+    // Quota or a private-mode restriction. A fixture that cannot persist is
+    // worth far less than one that throws mid-request.
+  }
+}
+
+function hydrate(): void {
+  if (typeof sessionStorage === 'undefined') return;
+  try {
+    const raw = sessionStorage.getItem(STORE_KEY);
+    if (!raw) return;
+    const snapshot = JSON.parse(raw) as Snapshot;
+    seq = snapshot.seq ?? 0;
+    refill(ORDERS, snapshot.orders ?? []);
+    refill(BIDS, snapshot.bids ?? []);
+    refill(OFFERS, snapshot.offers ?? []);
+    refill(CHAT_THREADS, snapshot.threads ?? []);
+    rekey(CHAT_MESSAGES, snapshot.messages ?? {});
+    if (snapshot.wallets) rekey(WALLETS, snapshot.wallets);
+    if (snapshot.ledgers) rekey(LEDGERS, snapshot.ledgers);
+  } catch {
+    // A corrupt or stale-shaped snapshot must not brick the app: fall back to
+    // the seeded fixture, which is exactly what a fresh tab would give.
+  }
+}
+
+/** Drop the persisted fixture and start from the seed on the next load. */
+export function resetMarketMockState(): void {
+  if (typeof sessionStorage === 'undefined') return;
+  sessionStorage.removeItem(STORE_KEY);
+}
+
 // ---------------------------------------------------------------- routes
 
 type Route = {
@@ -1349,6 +1433,7 @@ function announceMockMode(): void {
 
 export function installMarketMock(instance: AxiosInstance): void {
   announceMockMode();
+  hydrate();
 
   const realAdapter = instance.defaults.adapter as AxiosAdapter;
 
@@ -1357,6 +1442,13 @@ export function installMarketMock(instance: AxiosInstance): void {
     if (!route) return realAdapter(config);
 
     const { status, body } = route.reply(config);
+
+    // Persist after anything that could have mutated the fixture. GETs cannot,
+    // so they stay free.
+    if ((config.method ?? 'get').toLowerCase() !== 'get') {
+      persist();
+    }
+
     const response: AxiosResponse = {
       data: body,
       status,

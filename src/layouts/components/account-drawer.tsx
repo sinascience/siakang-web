@@ -122,7 +122,11 @@ export function AccountDrawer({ compact, sx, ...other }: AccountDrawerProps) {
     try {
       await signOut();
       onCloseLogoutConfirm();
-      router.refresh();
+      // SPA navigation, NOT router.refresh(). `refresh` is navigate(0), which
+      // is history.go(0) — a real document reload. That threw away all SPA
+      // state on every logout; under mocks it silently reset the fixture
+      // mid-test, so a dual-persona walk looked like a broken feature.
+      router.replace(paths.auth.jwt.signIn);
     } catch (error) {
       console.error(error);
     } finally {

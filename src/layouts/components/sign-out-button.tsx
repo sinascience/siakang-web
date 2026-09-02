@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 
 import Button from '@mui/material/Button';
 
+import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useAuthContext } from 'src/module/core/features/auth/hooks';
@@ -20,7 +21,8 @@ export function SignOutButton({ onClose, sx, ...other }: Props) {
     try {
       await signOut();
       onClose?.();
-      router.refresh();
+      // SPA navigation, not router.refresh() — see account-drawer.tsx.
+      router.replace(paths.auth.jwt.signIn);
     } catch (error) {
       console.error(error);
     }

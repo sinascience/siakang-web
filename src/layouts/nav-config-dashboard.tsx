@@ -96,11 +96,21 @@ export function useNavData(): NavSectionProps['data'] {
         {
           subheader: isLapak ? t('market.lapak') : t('market.customer'),
           items: [
-            {
-              title: t('market.bidsAuto'),
-              path: paths.dashboard.market.bidsAuto,
-              icon: ICONS.bids,
-            },
+            ...(isLapak
+              ? [
+                  {
+                    title: t('market.bidsLapak'),
+                    path: paths.dashboard.market.bidsLapak,
+                    icon: ICONS.bids,
+                  },
+                ]
+              : [
+                  {
+                    title: t('market.bidsAuto'),
+                    path: paths.dashboard.market.bidsAuto,
+                    icon: ICONS.bids,
+                  },
+                ]),
             {
               title: t('market.gigs'),
               path: paths.dashboard.market.gigs,

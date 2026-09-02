@@ -40,6 +40,12 @@ export function useRouter() {
       replace,
       back: () => navigate(-1),
       forward: () => navigate(1),
+      /**
+       * FULL DOCUMENT RELOAD — `navigate(0)` is `history.go(0)`, which the HTML
+       * spec makes equivalent to `location.reload()`. It discards all SPA
+       * state. Do not use it to "re-evaluate guards" after an auth change:
+       * the auth context already re-renders them. Navigate instead.
+       */
       refresh: () => navigate(0),
       ...navigate,
     }),
