@@ -11,6 +11,7 @@ import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 
+import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useTranslate } from 'src/locales';
@@ -26,7 +27,6 @@ import {
   TablePaginationCustom,
 } from 'src/shared/ui/table';
 
-import { manualBidDetailPath } from '../routes';
 import { useManualBidList } from '../hooks/use-manual-bid-list';
 import { ManualBidTableRow } from '../components/manual-bid-table-row';
 import { CreateManualBidDialog } from '../components/create-manual-bid-dialog';
@@ -60,7 +60,7 @@ export function ManualBidListView() {
   const { data, meta, loading, error, refresh } = useManualBidList(listParams);
 
   const onView = useCallback(
-    (id: string) => router.push(manualBidDetailPath(id)),
+    (id: string) => router.push(paths.dashboard.market.bidManual(id)),
     [router]
   );
 
@@ -145,7 +145,7 @@ export function ManualBidListView() {
           setCreateOpen(false);
           toast.success(t('list.postSuccess'));
           refresh();
-          router.push(manualBidDetailPath(bid.id));
+          router.push(paths.dashboard.market.bidManual(bid.id));
         }}
       />
     </DashboardContent>

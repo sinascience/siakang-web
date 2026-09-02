@@ -110,6 +110,11 @@ export function useNavData(): NavSectionProps['data'] {
                     path: paths.dashboard.market.bidsAuto,
                     icon: ICONS.bids,
                   },
+                  {
+                    title: t('market.bidsManual'),
+                    path: paths.dashboard.market.bidsManual,
+                    icon: ICONS.bids,
+                  },
                 ]),
             {
               title: t('market.gigs'),

@@ -24,7 +24,6 @@ import { PageHeader } from 'src/shared/ui/page-header';
 import { DashboardContent } from 'src/layouts/dashboard';
 import { formatIdr } from 'src/module/market/features/orders/utils/format';
 
-import { MANUAL_BID_LIST_PATH } from '../routes';
 import { useManualBid } from '../hooks/use-manual-bid';
 import { useBidOffers } from '../hooks/use-bid-offers';
 import { BidOfferCard } from '../components/bid-offer-card';
@@ -49,7 +48,7 @@ export function ManualBidDetailView() {
 
   const [awardTarget, setAwardTarget] = useState<BidOffer | null>(null);
 
-  const backHref = MANUAL_BID_LIST_PATH;
+  const backHref = paths.dashboard.market.bidsManual;
 
   if (loading) {
     return (
