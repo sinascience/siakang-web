@@ -1,0 +1,86 @@
+{
+  "list": {
+    "title": "Manual Bids",
+    "subtitle": "Post what you need, compare offers from lapak, then award one.",
+    "postAction": "Bid",
+    "table": {
+      "job": "Job",
+      "budget": "Budget",
+      "offers": "Offers",
+      "date": "Date",
+      "status": "Status"
+    },
+    "emptyTitle": "No manual bids yet",
+    "emptySubtitle": "Click \"Bid\" to post your first job.",
+    "postSuccess": "Bid posted successfully."
+  },
+  "statuses": {
+    "matching": "Matching",
+    "proposed": "Proposed",
+    "customer_confirmed": "Confirmed",
+    "accepted": "Accepted",
+    "no_match": "No Match",
+    "open": "Open",
+    "awarded": "Awarded",
+    "ordered": "Ordered",
+    "cancelled": "Cancelled"
+  },
+  "form": {
+    "newTitle": "Post a Manual Bid",
+    "category": "Category",
+    "title": "Job Title",
+    "titlePlaceholder": "e.g. Clean the backyard",
+    "description": "Description",
+    "descriptionPlaceholder": "Describe what work you need done",
+    "budget": "Budget",
+    "budgetHint": "An anchor for lapak when they make an offer — not the final order price.",
+    "freeHint": "Posting a bid is free. The platform fee only applies when you award an offer.",
+    "postAction": "Post",
+    "validation": {
+      "categoryRequired": "Category is required.",
+      "titleRequired": "Title is required.",
+      "titleMax": "Title must be at most 160 characters.",
+      "descriptionMax": "Description must be at most 2000 characters.",
+      "budgetRequired": "Budget is required.",
+      "budgetMin": "Budget must be at least Rp1."
+    }
+  },
+  "detail": {
+    "backToList": "Back to bid list",
+    "notFoundTitle": "Bid not found",
+    "notFoundSubtitle": "This bid was deleted or the link is invalid.",
+    "summaryTitle": "Summary",
+    "categoryLabel": "Category",
+    "budgetLabel": "Budget (anchor)",
+    "postedAt": "Posted",
+    "descriptionLabel": "Description",
+    "refresh": "Refresh",
+    "pollingHint": "Offers refresh automatically every few seconds while the bid is still open.",
+    "viewOrder": "View Order"
+  },
+  "offers": {
+    "title": "Offers",
+    "empty": "No offers yet. Check back later or click refresh.",
+    "cheapestBadge": "Cheapest",
+    "noMessage": "No message",
+    "statusPending": "Pending",
+    "statusAwarded": "Awarded",
+    "statusRejected": "Rejected",
+    "awardAction": "Award"
+  },
+  "award": {
+    "title": "Award the offer from {{lapak}}?",
+    "orderTotal": "Order total (from the offer)",
+    "platformFee": "Platform fee",
+    "warning": "Off-platform transactions are not tracked; fraud risk is the customer's responsibility.",
+    "confirmAction": "Award & Pay Fee",
+    "success": "Offer awarded. The order has been created."
+  },
+  "errors": {
+    "loadData": "Failed to load bids.",
+    "loadDetail": "Failed to load bid detail.",
+    "loadOffers": "Failed to load offers.",
+    "createFailed": "Failed to post the bid.",
+    "awardFailed": "Failed to award the offer."
+  }
+}

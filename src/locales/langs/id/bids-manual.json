@@ -1,0 +1,86 @@
+{
+  "list": {
+    "title": "Lelang Manual",
+    "subtitle": "Pasang kebutuhan Anda, bandingkan penawaran lapak, lalu menangkan salah satu.",
+    "postAction": "Lelang",
+    "table": {
+      "job": "Pekerjaan",
+      "budget": "Anggaran",
+      "offers": "Penawaran",
+      "date": "Tanggal",
+      "status": "Status"
+    },
+    "emptyTitle": "Belum ada lelang manual",
+    "emptySubtitle": "Klik \"Lelang\" untuk memasang kebutuhan pertama Anda.",
+    "postSuccess": "Lelang berhasil dipasang."
+  },
+  "statuses": {
+    "matching": "Mencari",
+    "proposed": "Diusulkan",
+    "customer_confirmed": "Dikonfirmasi",
+    "accepted": "Diterima",
+    "no_match": "Tidak Cocok",
+    "open": "Terbuka",
+    "awarded": "Dimenangkan",
+    "ordered": "Jadi Pesanan",
+    "cancelled": "Dibatalkan"
+  },
+  "form": {
+    "newTitle": "Pasang Lelang Manual",
+    "category": "Kategori",
+    "title": "Judul Pekerjaan",
+    "titlePlaceholder": "mis. Bersihkan taman belakang",
+    "description": "Deskripsi",
+    "descriptionPlaceholder": "Jelaskan detail pekerjaan yang Anda butuhkan",
+    "budget": "Anggaran",
+    "budgetHint": "Acuan bagi lapak saat membuat penawaran — bukan harga akhir pesanan.",
+    "freeHint": "Memasang lelang tidak dikenakan biaya. Biaya platform hanya berlaku saat Anda memenangkan penawaran.",
+    "postAction": "Pasang",
+    "validation": {
+      "categoryRequired": "Kategori wajib dipilih.",
+      "titleRequired": "Judul wajib diisi.",
+      "titleMax": "Judul maksimal 160 karakter.",
+      "descriptionMax": "Deskripsi maksimal 2000 karakter.",
+      "budgetRequired": "Anggaran wajib diisi.",
+      "budgetMin": "Anggaran minimal Rp1."
+    }
+  },
+  "detail": {
+    "backToList": "Kembali ke daftar lelang",
+    "notFoundTitle": "Lelang tidak ditemukan",
+    "notFoundSubtitle": "Lelang sudah dihapus atau tautannya tidak valid.",
+    "summaryTitle": "Ringkasan",
+    "categoryLabel": "Kategori",
+    "budgetLabel": "Anggaran (acuan)",
+    "postedAt": "Dipasang",
+    "descriptionLabel": "Deskripsi",
+    "refresh": "Segarkan",
+    "pollingHint": "Penawaran diperbarui otomatis setiap beberapa detik selama lelang masih terbuka.",
+    "viewOrder": "Lihat Pesanan"
+  },
+  "offers": {
+    "title": "Penawaran",
+    "empty": "Belum ada penawaran masuk. Cek kembali nanti atau klik segarkan.",
+    "cheapestBadge": "Termurah",
+    "noMessage": "Tanpa pesan",
+    "statusPending": "Menunggu",
+    "statusAwarded": "Dimenangkan",
+    "statusRejected": "Ditolak",
+    "awardAction": "Menangkan"
+  },
+  "award": {
+    "title": "Menangkan penawaran {{lapak}}?",
+    "orderTotal": "Total pesanan (dari penawaran)",
+    "platformFee": "Biaya platform",
+    "warning": "Transaksi di luar platform tidak terlacak; risiko fraud ditanggung customer.",
+    "confirmAction": "Menangkan & Bayar Biaya",
+    "success": "Penawaran dimenangkan. Pesanan telah dibuat."
+  },
+  "errors": {
+    "loadData": "Gagal memuat data lelang.",
+    "loadDetail": "Gagal memuat detail lelang.",
+    "loadOffers": "Gagal memuat penawaran.",
+    "createFailed": "Gagal memasang lelang.",
+    "awardFailed": "Gagal memenangkan penawaran."
+  }
+}
