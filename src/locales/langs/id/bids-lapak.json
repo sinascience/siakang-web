@@ -1,0 +1,69 @@
+{
+  "title": "Lelang Tukang",
+  "subtitle": "Cari pekerjaan dari lelang manual terbuka, dan pantau lelang otomatis yang cocok dengan Anda.",
+  "refresh": "Segarkan",
+  "guard": {
+    "title": "Halaman khusus tukang",
+    "subtitle": "Halaman ini hanya tersedia untuk akun tukang (lapak)."
+  },
+  "tabs": {
+    "manual": "Lelang Manual Terbuka",
+    "auto": "Lelang Otomatis Saya"
+  },
+  "table": {
+    "category": "Kategori",
+    "job": "Pekerjaan",
+    "budget": "Anggaran",
+    "offers": "Penawaran",
+    "distance": "Jarak",
+    "status": "Status",
+    "action": "Aksi"
+  },
+  "manual": {
+    "emptyTitle": "Belum ada lelang manual terbuka",
+    "emptySubtitle": "Lelang manual dari pelanggan akan muncul di sini saat tersedia.",
+    "placeAction": "Tawar"
+  },
+  "auto": {
+    "emptyTitle": "Belum ada lelang otomatis",
+    "emptySubtitle": "Lelang otomatis yang cocok dengan Anda akan muncul di sini.",
+    "waitingCustomer": "Menunggu konfirmasi pelanggan",
+    "acceptAction": "Terima",
+    "acceptSuccess": "Lelang diterima — pesanan telah dibuat.",
+    "viewOrder": "Lihat Pesanan",
+    "statuses": {
+      "matching": "Mencari kecocokan",
+      "proposed": "Menunggu konfirmasi pelanggan",
+      "customer_confirmed": "Siap diterima",
+      "accepted": "Diterima",
+      "ordered": "Pesanan dibuat",
+      "no_match": "Tidak ada kecocokan",
+      "open": "Terbuka",
+      "awarded": "Dimenangkan",
+      "cancelled": "Dibatalkan"
+    }
+  },
+  "offerDialog": {
+    "newTitle": "Ajukan Penawaran",
+    "updateTitle": "Perbarui Penawaran Anda",
+    "subtitleBudget": "Anggaran pelanggan: {{amount}}",
+    "amountLabel": "Nominal Penawaran (Rp)",
+    "messageLabel": "Pesan untuk Pelanggan (opsional)",
+    "placeAction": "Ajukan Penawaran",
+    "updateAction": "Perbarui Penawaran",
+    "placeSuccess": "Penawaran berhasil diajukan.",
+    "updateSuccess": "Penawaran berhasil diperbarui.",
+    "alreadyOfferedHint": "Anda sudah pernah menawar lelang ini — mengirim ulang akan memperbarui nominal dan pesan penawaran sebelumnya.",
+    "notMoneyHint": "Belum ada biaya di tahap ini — biaya platform dipotong dari pelanggan saat penawaran Anda dipilih, dan Anda dibayar setelah pesanan selesai.",
+    "validation": {
+      "amountRequired": "Nominal penawaran wajib diisi.",
+      "amountMin": "Nominal penawaran minimal Rp 1.",
+      "messageMax": "Pesan maksimal 500 karakter."
+    }
+  },
+  "errors": {
+    "loadFailed": "Gagal memuat daftar lelang.",
+    "offerFailed": "Gagal mengirim penawaran.",
+    "acceptFailed": "Gagal menerima lelang."
+  }
+}

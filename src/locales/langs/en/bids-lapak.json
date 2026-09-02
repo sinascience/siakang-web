@@ -1,0 +1,69 @@
+{
+  "title": "Bid Jobs",
+  "subtitle": "Browse open manual bids, and track automatic bids matched to you.",
+  "refresh": "Refresh",
+  "guard": {
+    "title": "Lapak-only page",
+    "subtitle": "This page is only available to lapak (worker) accounts."
+  },
+  "tabs": {
+    "manual": "Open Manual Bids",
+    "auto": "My Automatic Bids"
+  },
+  "table": {
+    "category": "Category",
+    "job": "Job",
+    "budget": "Budget",
+    "offers": "Offers",
+    "distance": "Distance",
+    "status": "Status",
+    "action": "Action"
+  },
+  "manual": {
+    "emptyTitle": "No open manual bids yet",
+    "emptySubtitle": "Manual bids posted by customers will show up here.",
+    "placeAction": "Offer"
+  },
+  "auto": {
+    "emptyTitle": "No automatic bids yet",
+    "emptySubtitle": "Automatic bids matched to you will show up here.",
+    "waitingCustomer": "Waiting on customer confirmation",
+    "acceptAction": "Accept",
+    "acceptSuccess": "Bid accepted — the order has been created.",
+    "viewOrder": "View Order",
+    "statuses": {
+      "matching": "Finding a match",
+      "proposed": "Waiting on customer confirmation",
+      "customer_confirmed": "Ready to accept",
+      "accepted": "Accepted",
+      "ordered": "Order created",
+      "no_match": "No match found",
+      "open": "Open",
+      "awarded": "Awarded",
+      "cancelled": "Cancelled"
+    }
+  },
+  "offerDialog": {
+    "newTitle": "Place an Offer",
+    "updateTitle": "Update Your Offer",
+    "subtitleBudget": "Customer budget: {{amount}}",
+    "amountLabel": "Offer Amount (Rp)",
+    "messageLabel": "Message to Customer (optional)",
+    "placeAction": "Place Offer",
+    "updateAction": "Update Offer",
+    "placeSuccess": "Offer placed successfully.",
+    "updateSuccess": "Offer updated successfully.",
+    "alreadyOfferedHint": "You already offered on this bid — sending again replaces the amount and message of your previous offer.",
+    "notMoneyHint": "No charge at this stage — the platform fee is debited from the customer when your offer is awarded, and you're paid once the order completes.",
+    "validation": {
+      "amountRequired": "Offer amount is required.",
+      "amountMin": "Offer amount must be at least Rp 1.",
+      "messageMax": "Message must be at most 500 characters."
+    }
+  },
+  "errors": {
+    "loadFailed": "Failed to load bids.",
+    "offerFailed": "Failed to send the offer.",
+    "acceptFailed": "Failed to accept the bid."
+  }
+}
