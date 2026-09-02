@@ -73,6 +73,23 @@ Chat history and sending work under mocks; live delivery does not, and it is
 first verified at phase QA against the real backend. Make the no-stream case
 degrade gracefully rather than treating it as a bug.
 
+## If you need a full-page view before your routes are wired
+
+Your master wires routes after merge, so your pages have no URL yet. A throwaway
+harness inside your own `allowed_paths`, composing the real `App` / `AuthGuard` /
+`DashboardLayout` with a local `MemoryRouter`, is the accepted way to see them.
+Delete it before committing.
+
+One trap, found the hard way: **`GuestGuard` redirects with
+`window.location.href` on a successful sign-in**, which throws away an
+in-harness sign-in route. Sign in through the **real** app at
+`/auth/jwt/sign-in` first, then navigate to your harness — `AuthProvider`
+re-hydrates the session from storage and the harness comes up already
+authenticated.
+
+Prefer no harness at all where you can: with auth mocked, existing wired routes
+often reach what you need with fewer moving parts.
+
 ## Rules
 
 - **This is the only supported mechanism.** Do not fake the auth context, do not

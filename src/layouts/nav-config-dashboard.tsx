@@ -29,6 +29,7 @@ const ICONS = {
   orders: icon('ic-order'),
   catalog: icon('ic-ecommerce'),
   gigs: icon('ic-job'),
+  bids: icon('ic-invoice'),
 };
 
 // SIAKANG marketplace personas. A marketplace user gets the market shell
@@ -95,6 +96,11 @@ export function useNavData(): NavSectionProps['data'] {
         {
           subheader: isLapak ? t('market.lapak') : t('market.customer'),
           items: [
+            {
+              title: t('market.bidsAuto'),
+              path: paths.dashboard.market.bidsAuto,
+              icon: ICONS.bids,
+            },
             {
               title: t('market.gigs'),
               path: paths.dashboard.market.gigs,

@@ -11,6 +11,7 @@ import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 
+import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useTranslate } from 'src/locales';
@@ -26,7 +27,6 @@ import {
   TablePaginationCustom,
 } from 'src/shared/ui/table';
 
-import { autoBidPaths } from '../routes';
 import { useAutoBidList } from '../hooks/use-auto-bid-list';
 import { AutoBidTableRow } from '../components/auto-bid-table-row';
 import { AutoBidCreateDialog } from '../components/auto-bid-create-dialog';
@@ -64,7 +64,7 @@ export function AutoBidListView() {
 
   const { data, meta, loading, error, refresh } = useAutoBidList(listParams);
 
-  const onView = useCallback((id: string) => router.push(autoBidPaths.detail(id)), [router]);
+  const onView = useCallback((id: string) => router.push(paths.dashboard.market.bidAuto(id)), [router]);
 
   const showSkeletons = loading && data.length === 0;
   const isEmpty = !loading && data.length === 0;
@@ -147,7 +147,7 @@ export function AutoBidListView() {
           setCreateOpen(false);
           toast.success(t('form.createSuccess'));
           refresh();
-          router.push(autoBidPaths.detail(bid.id));
+          router.push(paths.dashboard.market.bidAuto(bid.id));
         }}
       />
     </DashboardContent>

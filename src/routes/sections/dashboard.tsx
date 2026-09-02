@@ -29,6 +29,8 @@ const TranslationOverridePage = lazy(
 );
 
 const WalletPage = lazy(() => import('src/module/market/features/wallet/pages'));
+const AutoBidListPage = lazy(() => import('src/module/market/features/bids/auto/pages/list'));
+const AutoBidDetailPage = lazy(() => import('src/module/market/features/bids/auto/pages/detail'));
 const GigsListPage = lazy(() => import('src/module/market/features/gigs/pages/list'));
 const GigDetailPage = lazy(() => import('src/module/market/features/gigs/pages/detail'));
 const CatalogListPage = lazy(() => import('src/module/market/features/catalog/pages/list'));
@@ -90,6 +92,8 @@ export const dashboardRoutes: RouteObject[] = [
       // SIAKANG marketplace. Not wrapped in PermissionGuard: /market/v1/* runs
       // JWTAuth() only, so `permissions` is empty for marketplace users by design.
       { path: 'market/wallet', element: <WalletPage /> },
+      { path: 'market/bids/auto', element: <AutoBidListPage /> },
+      { path: 'market/bids/auto/:id', element: <AutoBidDetailPage /> },
       { path: 'market/gigs', element: <GigsListPage /> },
       { path: 'market/gigs/:id', element: <GigDetailPage /> },
       { path: 'market/catalog', element: <CatalogListPage /> },

@@ -23,7 +23,6 @@ import { ErrorDialog } from 'src/shared/ui/error-dialog';
 import { DashboardContent } from 'src/layouts/dashboard';
 import { formatIdr } from 'src/module/market/features/orders/utils/format';
 
-import { autoBidPaths } from '../routes';
 import { useAutoBid } from '../hooks/use-auto-bid';
 import { useConfirmAutoBid } from '../hooks/use-confirm-auto-bid';
 import { AutoBidStatusLabel } from '../components/auto-bid-status-label';
@@ -43,7 +42,7 @@ export function AutoBidDetailView() {
     clearError: clearConfirmError,
   } = useConfirmAutoBid();
 
-  const backHref = autoBidPaths.list;
+  const backHref = paths.dashboard.market.bidsAuto;
 
   const handleConfirm = async () => {
     if (!bid) return;

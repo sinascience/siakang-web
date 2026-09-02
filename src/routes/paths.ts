@@ -31,6 +31,8 @@ export const paths = {
       product: (id: string) => `/market/catalog/${id}`,
       orders: '/market/orders',
       order: (id: string) => `/market/orders/${id}`,
+      bidsAuto: '/market/bids/auto',
+      bidAuto: (id: string) => `/market/bids/auto/${id}`,
       chat: '/market/chat',
       chatThread: (id: string) => `/market/chat/${id}`,
     },
