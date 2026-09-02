@@ -5,7 +5,10 @@ import react from '@vitejs/plugin-react-swc';
 
 // ----------------------------------------------------------------------
 
-const PORT = 8081;
+// Default to a development port, NOT 8081. 8081 is reserved for QA runs, and
+// a bare `yarn dev` used to take it — which is how an FE dev server ended up
+// squatting a live QA window. QA now starts explicitly with `yarn dev:qa`.
+const PORT = 3000;
 
 // Split heavy vendor libraries into separate, cacheable chunks so no single
 // bundle balloons past the size warning threshold.

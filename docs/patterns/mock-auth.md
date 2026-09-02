@@ -28,8 +28,12 @@ route and persona behaves as it does in production.
    ```
 
 2. Start the dev server on **the port your task file assigns you**:
-   `yarn dev --port 3000`. Never a bare `yarn dev` — it defaults to 8081, which
-   is reserved for QA.
+   `yarn dev --port 3000`.
+
+   The default is now 3000, not 8081 — a bare `yarn dev` no longer takes QA's
+   port. Still pass your assigned port explicitly when several minors run at
+   once, or you will collide with each other. **QA starts with `yarn dev:qa`**,
+   which pins 8081; never run that yourself.
 
 3. Go to `/auth/jwt/sign-in` and sign in as any seeded account. Password for all
    of them is `siakang123`, exactly as seeded.
