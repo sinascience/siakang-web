@@ -4,8 +4,6 @@ import axios from 'axios';
 
 import { CONFIG } from 'src/shared/config';
 
-import { installMarketMock } from './market-mock';
-
 declare module 'axios' {
   export interface AxiosRequestConfig {
     _retry?: boolean;
@@ -27,8 +25,16 @@ const axiosInstance = axios.create({
 
 // Dev-only: answer /market/v1/* from the in-repo fixtures instead of the
 // backend. Off in committed code; QA always runs with mocks OFF.
-if (CONFIG.useMocks) {
-  installMarketMock(axiosInstance);
+//
+// Imported DYNAMICALLY behind `import.meta.env.DEV` on purpose. It used to be
+// a static import, which put the entire fixture set — seeded logins, lapak
+// names, coordinates, the fake API — into the production bundle even with the
+// runtime flag off. In a production build `import.meta.env.DEV` is false, so
+// this branch and the module it references are eliminated and cannot ship.
+if (import.meta.env.DEV && CONFIG.useMocks) {
+  void import('./market-mock').then(({ installMarketMock }) => {
+    installMarketMock(axiosInstance);
+  });
 }
 
 let getAccessTokenFn: () => string | null = () => null;
