@@ -65,11 +65,41 @@ export type Transaction = {
 };
 
 export const recentTransactions: Transaction[] = [
-  { id: 'INV-2031', name: 'PT Cahaya Abadi', date: '05 Jun 2026', amount: 124_500_000, status: 'completed' },
-  { id: 'INV-2030', name: 'CV Mitra Sejati', date: '04 Jun 2026', amount: 58_200_000, status: 'pending' },
-  { id: 'INV-2029', name: 'PT Sumber Makmur', date: '04 Jun 2026', amount: 312_000_000, status: 'completed' },
-  { id: 'INV-2028', name: 'Toko Berkah Jaya', date: '03 Jun 2026', amount: 9_800_000, status: 'failed' },
-  { id: 'INV-2027', name: 'PT Nusantara Tek', date: '02 Jun 2026', amount: 76_400_000, status: 'completed' },
+  {
+    id: 'INV-2031',
+    name: 'PT Cahaya Abadi',
+    date: '05 Jun 2026',
+    amount: 124_500_000,
+    status: 'completed',
+  },
+  {
+    id: 'INV-2030',
+    name: 'CV Mitra Sejati',
+    date: '04 Jun 2026',
+    amount: 58_200_000,
+    status: 'pending',
+  },
+  {
+    id: 'INV-2029',
+    name: 'PT Sumber Makmur',
+    date: '04 Jun 2026',
+    amount: 312_000_000,
+    status: 'completed',
+  },
+  {
+    id: 'INV-2028',
+    name: 'Toko Berkah Jaya',
+    date: '03 Jun 2026',
+    amount: 9_800_000,
+    status: 'failed',
+  },
+  {
+    id: 'INV-2027',
+    name: 'PT Nusantara Tek',
+    date: '02 Jun 2026',
+    amount: 76_400_000,
+    status: 'completed',
+  },
 ];
 
 export const txStatusColor: Record<TxStatus, 'success' | 'warning' | 'error'> = {

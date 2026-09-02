@@ -19,10 +19,7 @@ type CountdownState = {
  * `expired: true` while the order is still `awaiting_confirmation` is
  * expected, not a bug. A refresh/revisit is enough to pick up the flip.
  */
-export function useConfirmCountdown(
-  deadlineAt: string | null,
-  active: boolean
-): CountdownState {
+export function useConfirmCountdown(deadlineAt: string | null, active: boolean): CountdownState {
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {

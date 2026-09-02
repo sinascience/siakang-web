@@ -233,8 +233,7 @@ export const endpoints = {
       confirm: (id: string) => `/market/v1/bids/${id}/confirm`,
       accept: (id: string) => `/market/v1/bids/${id}/accept`,
       offers: (id: string) => `/market/v1/bids/${id}/offers`,
-      award: (id: string, offerId: string) =>
-        `/market/v1/bids/${id}/offers/${offerId}/award`,
+      award: (id: string, offerId: string) => `/market/v1/bids/${id}/offers/${offerId}/award`,
     },
     chat: {
       threads: '/market/v1/chat/threads',

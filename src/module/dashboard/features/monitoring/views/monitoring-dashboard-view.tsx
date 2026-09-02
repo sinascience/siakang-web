@@ -39,7 +39,11 @@ export function MonitoringDashboardView() {
   const vs = t('monitoring.vsYesterday');
 
   const gaugeColor = (v: number) =>
-    v >= 80 ? theme.palette.error.main : v >= 60 ? theme.palette.warning.main : theme.palette.success.main;
+    v >= 80
+      ? theme.palette.error.main
+      : v >= 60
+        ? theme.palette.warning.main
+        : theme.palette.success.main;
 
   const httpColors = [
     theme.palette.success.main,

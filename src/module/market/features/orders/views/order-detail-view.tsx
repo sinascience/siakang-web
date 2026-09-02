@@ -335,11 +335,7 @@ function OrderItemsCard({ order }: { order: Order }) {
       <Stack spacing={1.5} sx={{ p: 3, alignItems: 'flex-end' }}>
         <TotalRow label={t('totals.total')} value={formatIdr(order.total_idr)} />
         <TotalRow label={t('totals.paid')} value={formatIdr(order.paid_idr)} />
-        <TotalRow
-          label={t('totals.outstanding')}
-          value={formatIdr(order.outstanding_idr)}
-          strong
-        />
+        <TotalRow label={t('totals.outstanding')} value={formatIdr(order.outstanding_idr)} strong />
       </Stack>
     </Card>
   );

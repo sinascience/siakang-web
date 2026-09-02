@@ -40,11 +40,7 @@ export function ManualBidDetailView() {
   const { data: bid, loading, notFound, error, refresh } = useManualBid(id);
   const isOpen = bid?.status === 'open';
 
-  const {
-    data: offers,
-    loading: offersLoading,
-    refresh: refreshOffers,
-  } = useBidOffers(id, isOpen);
+  const { data: offers, loading: offersLoading, refresh: refreshOffers } = useBidOffers(id, isOpen);
 
   const [awardTarget, setAwardTarget] = useState<BidOffer | null>(null);
 

@@ -115,8 +115,7 @@ export async function listItemsPaginated(
 
   if (search) {
     filtered = filtered.filter(
-      (it) =>
-        it.name.toLowerCase().includes(search) || it.code.toLowerCase().includes(search)
+      (it) => it.name.toLowerCase().includes(search) || it.code.toLowerCase().includes(search)
     );
   }
   if (params.category) {
@@ -147,10 +146,7 @@ export async function getItem(dataset: ItemDataset, id: string): Promise<Item> {
   return delay({ ...found });
 }
 
-export async function createItem(
-  dataset: ItemDataset,
-  payload: CreateItemPayload
-): Promise<Item> {
+export async function createItem(dataset: ItemDataset, payload: CreateItemPayload): Promise<Item> {
   const now = new Date().toISOString();
   sequences[dataset] += 1;
   const seq = sequences[dataset];
@@ -209,11 +205,46 @@ export async function deleteItem(dataset: ItemDataset, id: string): Promise<{ id
 // ----------------------------------------------------------------------
 
 const SAMPLE_IMPORT: Omit<Item, 'id' | 'code' | 'created_at' | 'updated_at'>[] = [
-  { name: 'Sample Laptop 14"', category: 'electronics', price: 8_500_000, stock: 12, description: null, is_active: true },
-  { name: 'Sample Office Chair', category: 'furniture', price: 1_250_000, stock: 20, description: null, is_active: true },
-  { name: 'Sample Notebook A5', category: 'stationery', price: 15_000, stock: 150, description: null, is_active: true },
-  { name: 'Sample Ground Coffee', category: 'food', price: 45_000, stock: 80, description: null, is_active: true },
-  { name: 'Sample Power Bank', category: 'electronics', price: 250_000, stock: 35, description: null, is_active: false },
+  {
+    name: 'Sample Laptop 14"',
+    category: 'electronics',
+    price: 8_500_000,
+    stock: 12,
+    description: null,
+    is_active: true,
+  },
+  {
+    name: 'Sample Office Chair',
+    category: 'furniture',
+    price: 1_250_000,
+    stock: 20,
+    description: null,
+    is_active: true,
+  },
+  {
+    name: 'Sample Notebook A5',
+    category: 'stationery',
+    price: 15_000,
+    stock: 150,
+    description: null,
+    is_active: true,
+  },
+  {
+    name: 'Sample Ground Coffee',
+    category: 'food',
+    price: 45_000,
+    stock: 80,
+    description: null,
+    is_active: true,
+  },
+  {
+    name: 'Sample Power Bank',
+    category: 'electronics',
+    price: 250_000,
+    stock: 35,
+    description: null,
+    is_active: false,
+  },
 ];
 
 export async function importSampleItems(dataset: ItemDataset): Promise<{ imported: number }> {

@@ -111,10 +111,7 @@ export function OrdersListView() {
               value={tab.value}
               label={t(`statuses.${tab.value}`)}
               icon={
-                <Label
-                  variant={tab.value === statusTab ? 'filled' : 'soft'}
-                  color={tab.color}
-                >
+                <Label variant={tab.value === statusTab ? 'filled' : 'soft'} color={tab.color}>
                   {(tab.value === 'all' ? counts?.all : counts?.[tab.value]) ?? 0}
                 </Label>
               }
@@ -152,7 +149,9 @@ export function OrdersListView() {
                           sx={{ color: 'text.disabled', mb: 1 }}
                         />
                         <Typography variant="h6">
-                          {statusTab === 'all' ? t('list.emptyTitle') : t('list.emptyFilteredTitle')}
+                          {statusTab === 'all'
+                            ? t('list.emptyTitle')
+                            : t('list.emptyFilteredTitle')}
                         </Typography>
                         <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
                           {statusTab === 'all'

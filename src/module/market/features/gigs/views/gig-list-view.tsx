@@ -19,7 +19,12 @@ import { useGigList } from '../hooks/use-gig-list';
 // Card grid, same as the catalog — a browse surface, not a data table.
 // ----------------------------------------------------------------------
 
-const GRID_COLUMNS = { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' };
+const GRID_COLUMNS = {
+  xs: '1fr',
+  sm: 'repeat(2, 1fr)',
+  md: 'repeat(3, 1fr)',
+  lg: 'repeat(4, 1fr)',
+};
 const PAGE_SIZE = 12;
 
 export function GigListView() {
@@ -47,7 +52,6 @@ export function GigListView() {
           <Box sx={{ display: 'grid', gap: 3, gridTemplateColumns: GRID_COLUMNS }}>
             {showSkeletons &&
               Array.from({ length: 8 }).map((_, index) => (
-                 
                 <Skeleton key={index} variant="rounded" sx={{ pt: '150%' }} />
               ))}
 
@@ -58,7 +62,11 @@ export function GigListView() {
 
           {isEmpty && (
             <Stack spacing={1} sx={{ alignItems: 'center', textAlign: 'center', py: 10 }}>
-              <Iconify width={64} icon="solar:case-minimalistic-bold" sx={{ color: 'text.disabled' }} />
+              <Iconify
+                width={64}
+                icon="solar:case-minimalistic-bold"
+                sx={{ color: 'text.disabled' }}
+              />
               <Typography variant="h6">{t('list.emptyTitle')}</Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {t('list.emptySubtitle')}

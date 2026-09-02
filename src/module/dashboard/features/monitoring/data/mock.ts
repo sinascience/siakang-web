@@ -19,7 +19,11 @@ export const HOURS = [
 export type Kpi = { value: number; delta: number; spark: number[] };
 
 export const monitoringKpis: Record<'uptime' | 'response' | 'requests' | 'errors', Kpi> = {
-  uptime: { value: 99.95, delta: 0.02, spark: [99.9, 99.8, 99.95, 99.97, 99.9, 99.95, 99.99, 99.95] },
+  uptime: {
+    value: 99.95,
+    delta: 0.02,
+    spark: [99.9, 99.8, 99.95, 99.97, 99.9, 99.95, 99.99, 99.95],
+  },
   response: { value: 182, delta: -5.4, spark: [210, 198, 205, 190, 188, 192, 185, 182] },
   requests: { value: 14_200, delta: 9.1, spark: [9, 11, 10, 13, 12, 14, 13, 14] },
   errors: { value: 0.42, delta: 0.08, spark: [0.3, 0.35, 0.32, 0.4, 0.38, 0.45, 0.41, 0.42] },

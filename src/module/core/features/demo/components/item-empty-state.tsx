@@ -38,7 +38,10 @@ export function ItemEmptyState({ onCreate, onImport, importing, showVideo = true
     <Stack
       direction={{ xs: 'column', sm: 'row' }}
       spacing={1.5}
-      sx={{ alignItems: { xs: 'stretch', sm: 'center' }, justifyContent: { xs: 'center', md: 'flex-start' } }}
+      sx={{
+        alignItems: { xs: 'stretch', sm: 'center' },
+        justifyContent: { xs: 'center', md: 'flex-start' },
+      }}
     >
       <Button
         size="large"
@@ -120,7 +123,8 @@ export function ItemEmptyState({ onCreate, onImport, importing, showVideo = true
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              border: (theme) => `solid 1px ${varAlpha(theme.vars.palette.primary.mainChannel, 0.16)}`,
+              border: (theme) =>
+                `solid 1px ${varAlpha(theme.vars.palette.primary.mainChannel, 0.16)}`,
               background: (theme) =>
                 `linear-gradient(135deg, ${varAlpha(theme.vars.palette.primary.mainChannel, 0.16)}, ${varAlpha(theme.vars.palette.primary.mainChannel, 0.02)})`,
               transition: (theme) => theme.transitions.create(['box-shadow']),
@@ -130,7 +134,13 @@ export function ItemEmptyState({ onCreate, onImport, importing, showVideo = true
           >
             <Iconify
               icon="solar:inbox-in-bold-duotone"
-              sx={{ position: 'absolute', width: 150, height: 150, color: 'primary.main', opacity: 0.14 }}
+              sx={{
+                position: 'absolute',
+                width: 150,
+                height: 150,
+                color: 'primary.main',
+                opacity: 0.14,
+              }}
             />
 
             <Box
@@ -183,7 +193,9 @@ export function ItemEmptyState({ onCreate, onImport, importing, showVideo = true
               position: 'absolute',
               color: 'common.white',
               bgcolor: (theme) => varAlpha(theme.vars.palette.grey['900Channel'], 0.48),
-              '&:hover': { bgcolor: (theme) => varAlpha(theme.vars.palette.grey['900Channel'], 0.72) },
+              '&:hover': {
+                bgcolor: (theme) => varAlpha(theme.vars.palette.grey['900Channel'], 0.72),
+              },
             }}
           >
             <Iconify icon="mingcute:close-line" width={18} />

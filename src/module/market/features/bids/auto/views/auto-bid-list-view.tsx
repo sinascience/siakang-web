@@ -64,7 +64,10 @@ export function AutoBidListView() {
 
   const { data, meta, loading, error, refresh } = useAutoBidList(listParams);
 
-  const onView = useCallback((id: string) => router.push(paths.dashboard.market.bidAuto(id)), [router]);
+  const onView = useCallback(
+    (id: string) => router.push(paths.dashboard.market.bidAuto(id)),
+    [router]
+  );
 
   const showSkeletons = loading && data.length === 0;
   const isEmpty = !loading && data.length === 0;

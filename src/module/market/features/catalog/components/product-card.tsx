@@ -55,7 +55,11 @@ export function ProductCard({ product }: Props) {
             <Typography variant="caption" noWrap sx={{ flex: 1, color: 'text.secondary' }}>
               {product.lapak.name}
             </Typography>
-            <Iconify icon="eva:star-fill" width={14} sx={{ color: 'warning.main', flexShrink: 0 }} />
+            <Iconify
+              icon="eva:star-fill"
+              width={14}
+              sx={{ color: 'warning.main', flexShrink: 0 }}
+            />
             <Typography variant="caption" sx={{ flexShrink: 0 }}>
               {product.lapak.rating.toFixed(1)}
             </Typography>

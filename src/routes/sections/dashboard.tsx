@@ -32,7 +32,9 @@ const WalletPage = lazy(() => import('src/module/market/features/wallet/pages'))
 const AutoBidListPage = lazy(() => import('src/module/market/features/bids/auto/pages/list'));
 const AutoBidDetailPage = lazy(() => import('src/module/market/features/bids/auto/pages/detail'));
 const ManualBidListPage = lazy(() => import('src/module/market/features/bids/manual/pages/list'));
-const ManualBidDetailPage = lazy(() => import('src/module/market/features/bids/manual/pages/detail'));
+const ManualBidDetailPage = lazy(
+  () => import('src/module/market/features/bids/manual/pages/detail')
+);
 const LapakBidsPage = lazy(() => import('src/module/market/features/bids/lapak/pages/list'));
 const GigsListPage = lazy(() => import('src/module/market/features/gigs/pages/list'));
 const GigDetailPage = lazy(() => import('src/module/market/features/gigs/pages/detail'));

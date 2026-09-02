@@ -34,7 +34,11 @@ function makeSchema(t: TFunction) {
     amount_idr: z
       .number({ message: t('offerDialog.validation.amountRequired') })
       .min(1, { message: t('offerDialog.validation.amountMin') }),
-    message: z.string().max(500, { message: t('offerDialog.validation.messageMax') }).optional().or(z.literal('')),
+    message: z
+      .string()
+      .max(500, { message: t('offerDialog.validation.messageMax') })
+      .optional()
+      .or(z.literal('')),
   });
 }
 
@@ -54,7 +58,9 @@ export function PlaceOfferDialog({ open, bid, onClose, onPlaced }: Props) {
   const { t } = useTranslate('bids-lapak');
   const schema = useMemo(() => makeSchema(t), [t]);
 
-  const { data: existingOffer, loading: loadingOffer } = useMyBidOffer(open ? (bid?.id ?? null) : null);
+  const { data: existingOffer, loading: loadingOffer } = useMyBidOffer(
+    open ? (bid?.id ?? null) : null
+  );
   const { place, loading: placing, error, clearError } = usePlaceBidOffer();
 
   const defaultValues = useMemo<FormValues>(
@@ -118,13 +124,22 @@ export function PlaceOfferDialog({ open, bid, onClose, onPlaced }: Props) {
                 {isUpdate && (
                   <Typography
                     variant="caption"
-                    sx={{ color: 'warning.main', bgcolor: 'warning.lighter', borderRadius: 1, p: 1 }}
+                    sx={{
+                      color: 'warning.main',
+                      bgcolor: 'warning.lighter',
+                      borderRadius: 1,
+                      p: 1,
+                    }}
                   >
                     {t('offerDialog.alreadyOfferedHint')}
                   </Typography>
                 )}
 
-                <RHFNumericField name="amount_idr" label={t('offerDialog.amountLabel')} prefix="Rp" />
+                <RHFNumericField
+                  name="amount_idr"
+                  label={t('offerDialog.amountLabel')}
+                  prefix="Rp"
+                />
 
                 <Field.Text
                   name="message"

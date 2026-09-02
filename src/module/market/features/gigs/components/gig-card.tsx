@@ -13,7 +13,6 @@ import { useTranslate } from 'src/locales';
 import { Iconify } from 'src/shared/ui/iconify';
 import { formatIdr } from 'src/module/market/features/orders/utils/format';
 
-
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -63,7 +62,11 @@ export function GigCard({ gig }: Props) {
             <Typography variant="caption" noWrap sx={{ flex: 1, color: 'text.secondary' }}>
               {gig.lapak.name}
             </Typography>
-            <Iconify icon="eva:star-fill" width={14} sx={{ color: 'warning.main', flexShrink: 0 }} />
+            <Iconify
+              icon="eva:star-fill"
+              width={14}
+              sx={{ color: 'warning.main', flexShrink: 0 }}
+            />
             <Typography variant="caption" sx={{ flexShrink: 0 }}>
               {gig.lapak.rating.toFixed(1)}
             </Typography>

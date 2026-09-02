@@ -15,22 +15,19 @@ export function useCreateManualBid() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const create = useCallback(
-    async (params: Omit<CreateBidParams, 'mode'>): Promise<Bid | null> => {
-      setLoading(true);
-      setError(null);
-      try {
-        const bid = await createBid({ ...params, mode: 'manual' });
-        setLoading(false);
-        return bid;
-      } catch (err) {
-        setLoading(false);
-        setError(err instanceof Error ? err.message : i18n.t('bids-manual:errors.createFailed'));
-        return null;
-      }
-    },
-    []
-  );
+  const create = useCallback(async (params: Omit<CreateBidParams, 'mode'>): Promise<Bid | null> => {
+    setLoading(true);
+    setError(null);
+    try {
+      const bid = await createBid({ ...params, mode: 'manual' });
+      setLoading(false);
+      return bid;
+    } catch (err) {
+      setLoading(false);
+      setError(err instanceof Error ? err.message : i18n.t('bids-manual:errors.createFailed'));
+      return null;
+    }
+  }, []);
 
   const clearError = useCallback(() => setError(null), []);
 

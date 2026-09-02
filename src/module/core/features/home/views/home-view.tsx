@@ -91,9 +91,7 @@ export function HomeView() {
   return (
     <Box sx={{ p: { xs: 2, md: 3 } }}>
       <Stack spacing={0.5} sx={{ mb: 3 }}>
-        <Typography variant="h4">
-          {name ? t('greeting', { name }) : t('greetingGuest')}
-        </Typography>
+        <Typography variant="h4">{name ? t('greeting', { name }) : t('greetingGuest')}</Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           {t('intro')}
         </Typography>
@@ -156,11 +154,7 @@ export function HomeView() {
           >
             {shortcuts.map((s) => (
               <Card key={s.key}>
-                <CardActionArea
-                  component={RouterLink}
-                  href={s.href}
-                  sx={{ p: 3, height: '100%' }}
-                >
+                <CardActionArea component={RouterLink} href={s.href} sx={{ p: 3, height: '100%' }}>
                   <Stack spacing={1.5}>
                     <Box
                       sx={{
@@ -182,7 +176,11 @@ export function HomeView() {
                         {t(`shortcuts.${s.key}Desc`)}
                       </Typography>
                     </Box>
-                    <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center', color: `${s.color}.main` }}>
+                    <Stack
+                      direction="row"
+                      spacing={0.5}
+                      sx={{ alignItems: 'center', color: `${s.color}.main` }}
+                    >
                       <Typography variant="button">{t('shortcuts.open')}</Typography>
                       <Iconify icon="eva:arrow-ios-forward-fill" width={16} />
                     </Stack>
@@ -197,7 +195,12 @@ export function HomeView() {
           <CardHeader title={t('activity.title')} />
           <Stack divider={<Divider flexItem />} sx={{ px: 3, py: 1 }}>
             {activity.map((a) => (
-              <Stack key={a.text} direction="row" spacing={2} sx={{ py: 1.5, alignItems: 'center' }}>
+              <Stack
+                key={a.text}
+                direction="row"
+                spacing={2}
+                sx={{ py: 1.5, alignItems: 'center' }}
+              >
                 <Box
                   sx={{
                     width: 36,

@@ -83,8 +83,12 @@ export function LapakBidsView() {
     limit: autoTable.rowsPerPage,
   });
 
-  const { accept, loading: accepting, error: acceptError, clearError: clearAcceptError } =
-    useAcceptBid();
+  const {
+    accept,
+    loading: accepting,
+    error: acceptError,
+    clearError: clearAcceptError,
+  } = useAcceptBid();
   const [acceptingId, setAcceptingId] = useState<string | null>(null);
 
   const handleRefresh = useCallback(() => {

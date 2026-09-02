@@ -44,7 +44,11 @@ function makeSchema(t: TFunction) {
     stock: z.number({ message: t('validation.stockRequired') }).min(0, {
       message: t('validation.stockMin'),
     }),
-    description: z.string().max(500, { message: t('validation.descMax') }).optional().or(z.literal('')),
+    description: z
+      .string()
+      .max(500, { message: t('validation.descMax') })
+      .optional()
+      .or(z.literal('')),
     is_active: z.boolean(),
   });
 }
@@ -175,12 +179,7 @@ export function ItemFormDialog({ open, mode, dataset, seed, onClose, onSaved }: 
                 <RHFNumericField name="stock" label={t('form.stock')} />
               </Stack>
 
-              <Field.Text
-                name="description"
-                label={t('form.description')}
-                multiline
-                rows={3}
-              />
+              <Field.Text name="description" label={t('form.description')} multiline rows={3} />
 
               <FormControlLabel
                 control={

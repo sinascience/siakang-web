@@ -42,8 +42,12 @@ export function ProductDetailView() {
 
   const { data: product, loading, notFound, error } = useProduct(id);
 
-  const { create, loading: creating, error: createError, clearError: clearCreateError } =
-    useCreateOrder();
+  const {
+    create,
+    loading: creating,
+    error: createError,
+    clearError: clearCreateError,
+  } = useCreateOrder();
   const { pay, loading: paying, error: payError, clearError: clearPayError } = usePayOrder();
 
   // The order created for THIS checkout attempt. Kept around so a retry after
@@ -105,9 +109,11 @@ export function ProductDetailView() {
   }
 
   const busy = creating || paying;
-  const checkoutLabel = order ? t('detail.retryPay') : t('detail.checkout', {
-    amount: formatIdr(product.price_idr),
-  });
+  const checkoutLabel = order
+    ? t('detail.retryPay')
+    : t('detail.checkout', {
+        amount: formatIdr(product.price_idr),
+      });
 
   return (
     <DashboardContent maxWidth="md">
@@ -120,7 +126,9 @@ export function ProductDetailView() {
             gridTemplateColumns: { xs: '1fr', sm: '360px 1fr' },
           }}
         >
-          <Box sx={{ position: 'relative', pt: { xs: '100%', sm: 0 }, bgcolor: 'background.neutral' }}>
+          <Box
+            sx={{ position: 'relative', pt: { xs: '100%', sm: 0 }, bgcolor: 'background.neutral' }}
+          >
             {product.image_url ? (
               <Box
                 component="img"

@@ -58,8 +58,8 @@ const LAPAK_AGUS = {
   // Nearest of the three to the customer's seeded coordinates, and the best
   // rated — and unavailable. Exists so "unavailable lapaks are never proposed"
   // is provable rather than vacuous.
-  lat: -7.9670,
-  lng: 112.6330,
+  lat: -7.967,
+  lng: 112.633,
   rating: 5.0,
   is_available: false,
 };
@@ -169,9 +169,9 @@ function makeToken(login: string, ttlSeconds: number): string {
 function accountFromToken(token: string | undefined): SeededAccount | undefined {
   if (!token) return undefined;
   try {
-    const payload = JSON.parse(
-      atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))
-    ) as { sub?: string };
+    const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))) as {
+      sub?: string;
+    };
     return SEEDED_ACCOUNTS.find((a) => a.login === payload.sub);
   } catch {
     return undefined;
@@ -1402,7 +1402,6 @@ function findRoute(config: InternalAxiosRequestConfig): Route | undefined {
  * screenshots are how QA runs are reported.
  */
 function announceMockMode(): void {
-   
   console.warn(
     '%c MOCKS ON %c /market/v1/* is served from src/shared/lib/market-mock.ts — this is NOT the real backend.',
     'background:#B71C1C;color:#fff;font-weight:700',

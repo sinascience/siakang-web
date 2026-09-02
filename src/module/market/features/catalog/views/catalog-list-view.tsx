@@ -21,7 +21,12 @@ import { useProductList } from '../hooks/use-product-list';
 // Pagination still comes from `meta.pagination`, per the same contract shape.
 // ----------------------------------------------------------------------
 
-const GRID_COLUMNS = { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' };
+const GRID_COLUMNS = {
+  xs: '1fr',
+  sm: 'repeat(2, 1fr)',
+  md: 'repeat(3, 1fr)',
+  lg: 'repeat(4, 1fr)',
+};
 const PAGE_SIZE = 12;
 
 export function CatalogListView() {
@@ -49,7 +54,6 @@ export function CatalogListView() {
           <Box sx={{ display: 'grid', gap: 3, gridTemplateColumns: GRID_COLUMNS }}>
             {showSkeletons &&
               Array.from({ length: 8 }).map((_, index) => (
-                 
                 <Skeleton key={index} variant="rounded" sx={{ pt: '135%' }} />
               ))}
 

@@ -47,8 +47,12 @@ export function GigDetailView() {
 
   const { data: gig, loading, notFound, error } = useGig(id);
 
-  const { create, loading: creating, error: createError, clearError: clearCreateError } =
-    useCreateOrder();
+  const {
+    create,
+    loading: creating,
+    error: createError,
+    clearError: clearCreateError,
+  } = useCreateOrder();
   const { pay, loading: paying, error: payError, clearError: clearPayError } = usePayOrder();
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -95,7 +99,11 @@ export function GigDetailView() {
         <PageHeader backHref={backHref} backLabel={t('detail.backToList')} />
         <Card>
           <Stack spacing={2} sx={{ alignItems: 'center', textAlign: 'center', py: 10, px: 3 }}>
-            <Iconify width={64} icon="solar:case-minimalistic-bold" sx={{ color: 'text.disabled' }} />
+            <Iconify
+              width={64}
+              icon="solar:case-minimalistic-bold"
+              sx={{ color: 'text.disabled' }}
+            />
             <Typography variant="h6">
               {notFound ? t('detail.notFoundTitle') : tCommon('error.title')}
             </Typography>

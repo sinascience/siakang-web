@@ -67,7 +67,6 @@ export function getOrder(id: string): Promise<Order> {
 // need live here instead, next to the calls that use them.
 // ----------------------------------------------------------------------
 
-
 /**
  * `POST /orders` — creates the order in `pending_payment` with one unpaid
  * item. No money moves here; the price comes from the server's own product
