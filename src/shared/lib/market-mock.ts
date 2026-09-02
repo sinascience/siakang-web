@@ -1082,6 +1082,15 @@ const ROUTES: Route[] = [
       if (body.mode !== 'auto' && body.mode !== 'manual') {
         return { status: 422, body: errorBody('mode', 'Mode bid tidak valid.') };
       }
+      // The contract requires an origin for mode=auto and the backend enforces
+      // it (chk_bids_auto_has_origin). This mock used to DEFAULT the
+      // coordinates when they were absent, which hid a hard requirement for an
+      // entire sprint: FE-E was verified green here and 422'd against the real
+      // API. A mock more permissive than the contract manufactures false
+      // passes, so it now rejects exactly what the backend rejects.
+      if (body.mode === 'auto' && (typeof body.lat !== 'number' || typeof body.lng !== 'number')) {
+        return { status: 422, body: errorBody('lat', 'Lokasi wajib diisi untuk bid otomatis.') };
+      }
 
       const wallet = WALLETS[account.login];
       const now = new Date().toISOString();
@@ -1094,8 +1103,10 @@ const ROUTES: Route[] = [
         title: body.title ?? category.name,
         description: body.description ?? null,
         budget_idr: body.budget_idr,
-        lat: body.lat ?? CUSTOMER_LAT,
-        lng: body.lng ?? CUSTOMER_LNG,
+        // No `??` fallback: for `auto` these are validated above, and a manual
+        // bid has no matching origin to invent.
+        lat: body.lat ?? 0,
+        lng: body.lng ?? 0,
         fee_paid_idr: 0,
         matched_lapak: null,
         matched_distance_km: null,

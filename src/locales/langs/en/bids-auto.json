@@ -37,8 +37,17 @@
     "createSuccess": "Automatic bid created.",
     "validation": {
       "categoryRequired": "Category is required.",
-      "budgetRequired": "Budget is required."
-    }
+      "budgetRequired": "Budget is required.",
+      "latRequired": "Latitude is required.",
+      "lngRequired": "Longitude is required.",
+      "latRange": "Latitude must be between -90 and 90.",
+      "lngRange": "Longitude must be between -180 and 180."
+    },
+    "origin": "Job location",
+    "originHint": "Used to find the nearest worker. Adjust if needed.",
+    "useMyLocation": "My location",
+    "lat": "Latitude",
+    "lng": "Longitude"
   },
   "detail": {
     "title": "Auto Bid Detail",

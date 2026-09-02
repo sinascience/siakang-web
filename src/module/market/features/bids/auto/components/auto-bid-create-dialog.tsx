@@ -3,7 +3,7 @@ import type { Bid, CreateBidParams } from '../../types';
 
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
-import { useMemo, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import Box from '@mui/material/Box';
@@ -12,6 +12,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Skeleton from '@mui/material/Skeleton';
+import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
@@ -43,12 +44,35 @@ function makeSchema(t: TFunction) {
       .number({ message: t('form.validation.budgetRequired') })
       .min(1, { message: t('form.validation.budgetRequired') }),
     description: z.string().max(500).optional().or(z.literal('')),
+    // The contract requires an origin for mode=auto — it is what matching runs
+    // haversine against — and the backend enforces it (chk_bids_auto_has_origin).
+    // Every submission without these 422s.
+    lat: z
+      .number({ message: t('form.validation.latRequired') })
+      .min(-90, { message: t('form.validation.latRange') })
+      .max(90, { message: t('form.validation.latRange') }),
+    lng: z
+      .number({ message: t('form.validation.lngRequired') })
+      .min(-180, { message: t('form.validation.lngRange') })
+      .max(180, { message: t('form.validation.lngRange') }),
   });
 }
 
 type FormValues = z.infer<ReturnType<typeof makeSchema>>;
 
-const DEFAULT_VALUES: FormValues = { category_id: '', budget_idr: 0, description: '' };
+/**
+ * Prefilled origin. Editable and always sent — unlike the previous behaviour,
+ * where nothing was collected and the mock quietly invented coordinates, which
+ * hid a hard backend requirement for an entire sprint.
+ */
+const DEFAULT_ORIGIN = { lat: -7.97, lng: 112.63 };
+
+const DEFAULT_VALUES: FormValues = {
+  category_id: '',
+  budget_idr: 0,
+  description: '',
+  ...DEFAULT_ORIGIN,
+};
 
 type Props = {
   open: boolean;
@@ -76,12 +100,33 @@ export function AutoBidCreateDialog({ open, onClose, onCreated }: Props) {
 
   const fee = platformConfig.data?.bid_auto_fee_idr;
 
+  // Opt-in: nothing is requested unless the customer asks, so no permission
+  // prompt appears during an automated run. Failure is non-fatal — the
+  // prefilled origin stays and stays editable.
+  const [locating, setLocating] = useState(false);
+
+  const useMyLocation = () => {
+    if (!navigator.geolocation) return;
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        methods.setValue('lat', Number(pos.coords.latitude.toFixed(6)), { shouldValidate: true });
+        methods.setValue('lng', Number(pos.coords.longitude.toFixed(6)), { shouldValidate: true });
+        setLocating(false);
+      },
+      () => setLocating(false),
+      { timeout: 8000 }
+    );
+  };
+
   const onSubmit = methods.handleSubmit(async (values) => {
     const params: CreateBidParams = {
       mode: 'auto',
       category_id: values.category_id,
       budget_idr: values.budget_idr,
       description: values.description || undefined,
+      lat: values.lat,
+      lng: values.lng,
     };
     const bid = await create(params);
     if (bid) onCreated(bid);
@@ -114,6 +159,31 @@ export function AutoBidCreateDialog({ open, onClose, onCreated }: Props) {
               </Field.Select>
 
               <RHFNumericField name="budget_idr" label={t('form.budget')} prefix="Rp" />
+
+              <Stack spacing={1}>
+                <Stack direction="row" sx={{ alignItems: 'center', gap: 1 }}>
+                  <Typography variant="subtitle2" sx={{ flex: 1 }}>
+                    {t('form.origin')}
+                  </Typography>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    color="inherit"
+                    loading={locating}
+                    onClick={useMyLocation}
+                    startIcon={<Iconify icon="mingcute:location-fill" width={16} />}
+                  >
+                    {t('form.useMyLocation')}
+                  </Button>
+                </Stack>
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                  {t('form.originHint')}
+                </Typography>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                  <Field.Text name="lat" label={t('form.lat')} type="number" sx={{ flex: 1 }} />
+                  <Field.Text name="lng" label={t('form.lng')} type="number" sx={{ flex: 1 }} />
+                </Stack>
+              </Stack>
 
               <Field.Text
                 name="description"

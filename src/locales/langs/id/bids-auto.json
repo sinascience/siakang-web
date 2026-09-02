@@ -37,8 +37,17 @@
     "createSuccess": "Lelang otomatis dibuat.",
     "validation": {
       "categoryRequired": "Kategori wajib dipilih.",
-      "budgetRequired": "Anggaran wajib diisi."
-    }
+      "budgetRequired": "Anggaran wajib diisi.",
+      "latRequired": "Lintang wajib diisi.",
+      "lngRequired": "Bujur wajib diisi.",
+      "latRange": "Lintang harus antara -90 dan 90.",
+      "lngRange": "Bujur harus antara -180 dan 180."
+    },
+    "origin": "Lokasi pekerjaan",
+    "originHint": "Digunakan untuk mencari tukang terdekat. Sesuaikan bila perlu.",
+    "useMyLocation": "Lokasi saya",
+    "lat": "Lintang (lat)",
+    "lng": "Bujur (lng)"
   },
   "detail": {
     "title": "Detail Lelang Otomatis",
