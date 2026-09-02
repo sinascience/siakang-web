@@ -7,7 +7,12 @@ import resourcesToBackend from 'i18next-resources-to-backend';
 export const supportedLngs = ['id', 'en'] as const;
 export type LangCode = (typeof supportedLngs)[number];
 
-export const fallbackLng: LangCode = 'en';
+// Bahasa Indonesia is this product's default language (CLAUDE.md,
+// docs/patterns/i18n.md), and every feature's copy is written id-first. This
+// was 'en', so a fresh browser with no stored preference booted English and
+// nobody saw the primary language until they switched. A returning user's
+// choice still wins — detection reads localStorage first.
+export const fallbackLng: LangCode = 'id';
 export const defaultNS = 'common';
 
 export const storageConfig = {

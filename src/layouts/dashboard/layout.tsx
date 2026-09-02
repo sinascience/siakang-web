@@ -10,7 +10,7 @@ import Alert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
 import { iconButtonClasses } from '@mui/material/IconButton';
 
-// import { allLangs } from 'src/locales';
+import { allLangs } from 'src/locales';
 import { BrandLogo } from 'src/shared/ui/logo';
 import { useAuthContext } from 'src/module/core/features/auth/hooks';
 import { useSettingsContext } from 'src/module/core/features/settings';
@@ -24,7 +24,7 @@ import { Searchbar } from '../components/searchbar';
 import { useNavData } from '../nav-config-dashboard';
 import { MenuButton } from '../components/menu-button';
 import { AccountDrawer } from '../components/account-drawer';
-// import { LanguagePopover } from '../components/language-popover';
+import { LanguagePopover } from '../components/language-popover';
 import { HeaderBreadcrumbs } from '../components/header-breadcrumbs';
 // import { WorkspacesPopover } from '../components/workspaces-popover';
 import { dashboardLayoutVars, dashboardNavColorVars } from './css-vars';
@@ -164,7 +164,7 @@ export function DashboardLayout({
           </Box>
 
           {/** @slot Language popover */}
-          {/* <LanguagePopover data={allLangs} /> */}
+          <LanguagePopover data={allLangs} />
 
           {/** @slot Notifications popover */}
           {/* <NotificationsDrawer data={_notifications} /> */}

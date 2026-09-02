@@ -1,0 +1,25 @@
+# Normalise line endings in the repository to LF.
+#
+# prettier.config.mjs pins endOfLine: 'lf', but git here runs with
+# core.autocrlf=true, so a Windows checkout produced CRLF working files and
+# `yarn fm:check` reported ALL 449 source files as unformatted — line endings
+# only, nothing actually mis-styled. That made `yarn fm:check`, `fm:fix` and
+# `fix:all` unusable, and running the fix rewrote every file in the tree.
+#
+# Deferred to sprint integration deliberately: renormalising mid-sprint would
+# have conflicted with every in-flight task branch.
+
+* text=auto eol=lf
+
+# Binary assets must never be touched.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.pdf binary
